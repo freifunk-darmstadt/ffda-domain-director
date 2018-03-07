@@ -17,8 +17,12 @@ def serve():
     # node_id = ipv6_to_mac(request.remote_addr)
     domain = get_domain(lat, lon, current_app.domain_polygons)
     domain = domain if domain is not None else current_app.config["DEFAULT_DOMAIN"]
-    return jsonify({"lat": lat,
-                    "lon": lon,
-                    "accuracy": accuracy,
-                    "domain": domain,
-                    "switch_time": current_app.config["DOMAIN_SWITCH_TIME"]})
+    return jsonify({
+        "node_information": {
+            "location": {"lat": lat,
+                         "lon": lon,
+                         "accuracy": accuracy, },
+            "domain": {
+                "name": domain,
+                "switch_time": current_app.config["DOMAIN_SWITCH_TIME"], }
+        }})
