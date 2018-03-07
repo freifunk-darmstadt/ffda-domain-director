@@ -20,6 +20,7 @@ setup(
         "fastkml",
         "flask",
         "geojson",
+        "mozls",
         "pyyaml",
         "requests",
         "shapely",

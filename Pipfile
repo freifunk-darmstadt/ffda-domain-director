@@ -15,6 +15,7 @@ fastkml = "*"
 geojson = "*"
 lxml = "*"
 pyyaml = "*"
+mozls = "*"
 
 
 [dev-packages]
