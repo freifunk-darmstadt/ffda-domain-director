@@ -1,0 +1,6 @@
+host: "::"
+port: 28530
+geojson: "domains.geojson"
+mls_api_key: "test"
+domain_switch_time: 1600000000 # 13.09.2020 12:26pm (UTC)
+default_domain: default
