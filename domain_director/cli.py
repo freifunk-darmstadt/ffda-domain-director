@@ -27,5 +27,7 @@ def run(config):
         MLS_API_KEY=app_config["mls_api_key"],
         DOMAIN_SWITCH_TIME=app_config["domain_switch_time"],
         DEFAULT_DOMAIN=app_config["default_domain"],
+        MESHVIEWER_JSON_URL=app_config["meshviewer_json_url"],
+        SQLITE_PATH=app_config["sqlite_path"]
     ))
     app.run(host=app_config["host"], port=app_config["port"])

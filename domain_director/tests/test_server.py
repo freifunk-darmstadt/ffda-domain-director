@@ -6,16 +6,16 @@ from domain_director.server import create_app
 
 
 class TestServerModule(unittest.TestCase):
-
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         geojson_location = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                         "domains/sample_domains.geojson")
         app = create_app(dict(
             GEOJSON_FILE=geojson_location,
-            MLS_API_KEY="test"
-        ))
-        app.testing = True
-        self.app = app.test_client()
+            MLS_API_KEY="test",
+            SQlITE_PATH=":memory:",
+        ), testing=True)
+        cls.app = app.test_client()
 
     def test_empty_get_request(self):
         rv = self.app.get('/')
@@ -33,5 +33,6 @@ class TestServerModule(unittest.TestCase):
                      {'signal': -47, 'bssid': '80:2A:A8:C1:AD:03'},
                      {'signal': -74, 'bssid': '94:05:B6:5B:D9:E4'},
                      {'signal': -87, 'bssid': 'B4:30:52:38:C5:63'}]
-        rv = self.app.post('/', data={'wifis': json.dumps(post_data)})
+        rv = self.app.post('/', data={'wifis': json.dumps(post_data)},
+                           environ_base={'REMOTE_ADDR': '2001:67c:2ed8:6100:fc64:3ff:fecd:45dd'})
         self.assertEqual(rv.status_code, 200)

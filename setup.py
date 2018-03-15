@@ -21,6 +21,7 @@ setup(
         "flask",
         "geojson",
         "mozls",
+        "peewee",
         "pyyaml",
         "requests",
         "shapely",

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6f41fecf13e1af0f6a3b3e72c9fb43830993f55c68697f7f79045fa0817916c0"
+            "sha256": "7ddb7de12ba849579f3dd32ae4091f5d86d9616a18010e07073d2092ab58b3d6"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -133,11 +133,24 @@
             ],
             "version": "==0.0.3"
         },
+        "peewee": {
+            "hashes": [
+                "sha256:46d96502ea6f84f8e66c055282ac2d6fd332ccd62c8c3c93d68a43d055cd2450"
+            ],
+            "version": "==3.1.2"
+        },
         "pygeoif": {
             "hashes": [
                 "sha256:11aa0c071d38befa4af3bd123efa834abe0823a873f3744f0a070a44025afe04"
             ],
             "version": "==0.7"
+        },
+        "pymeshviewer": {
+            "hashes": [
+                "sha256:1a2a34f5edde3c98a9521c43f056cfc5b2eb1bd73dfd987c5e61edf7f9649d70",
+                "sha256:983b4f1a3ec25250f47687a5fde41db41657028d2842896dd239b4c42f0046f5"
+            ],
+            "version": "==0.1.1"
         },
         "python-dateutil": {
             "hashes": [
@@ -210,18 +223,11 @@
         }
     },
     "develop": {
-        "pew": {
-            "hashes": [
-                "sha256:a5256586e169199cb2213225261b6bdd7b657c309dcf4a02b61994308b313d4d",
-                "sha256:b8312728526c9010295c88215c95a1b1731fdbd1a568f728e069932bd0545611"
-            ],
-            "version": "==1.1.2"
-        },
         "pipenv": {
             "hashes": [
-                "sha256:974d530e1839bcdcc4392f78324be48c3f348aafeda43492f5f53a8e827ec375"
+                "sha256:e73da4642bcaf252bd12c996a0af99e4a295e40bd7c9304e9891c0d31dfc4bbf"
             ],
-            "version": "==11.1.0"
+            "version": "==11.1.8"
         },
         "virtualenv": {
             "hashes": [

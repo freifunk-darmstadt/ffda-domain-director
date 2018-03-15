@@ -1,0 +1,145 @@
+{
+  "timestamp": "2017-11-02T19:11:28+0100",
+  "nodes": [
+    {
+      "firstseen": "2016-11-27T03:52:55+0000",
+      "lastseen": "2017-10-21T00:33:50+0200",
+      "is_online": true,
+      "is_gateway": true,
+      "clients": 0,
+      "clients_wifi24": 0,
+      "clients_wifi5": 0,
+      "clients_other": 0,
+      "loadavg": 1.11,
+      "memory_usage": 0.34640929437841284,
+      "uptime": "2017-10-21T00:33:30+0200",
+      "node_id": "daff61000302",
+      "mac": "da:ff:61:00:03:02",
+      "addresses": [
+        "fe80::4813:f6ff:fe1f:dbe1",
+        "2001:67c:2ed8:6100::3",
+        "fd01:67c:2ed8:6100::3",
+        "fe80::d8ff:61ff:fe00:304"
+      ],
+      "site_code": "ffda",
+      "hostname": "gw03.darmstadt.freifunk.net",
+      "firmware": {
+        "base": "Debian"
+      },
+      "autoupdater": {
+        "enabled": false
+      },
+      "nproc": 3,
+      "vpn": true
+    },
+    {
+      "firstseen": "2016-11-30T02:15:04+0000",
+      "lastseen": "2017-10-21T00:33:50+0200",
+      "is_online": true,
+      "is_gateway": true,
+      "clients": 0,
+      "clients_wifi24": 0,
+      "clients_wifi5": 0,
+      "clients_other": 0,
+      "loadavg": 0.57,
+      "memory_usage": 0.26971274868843076,
+      "uptime": "2017-10-28T05:10:22+0200",
+      "node_id": "daff61000402",
+      "mac": "da:ff:61:00:04:02",
+      "addresses": [
+        "fe80::f433:deff:fec5:ca17",
+        "fe80::d8ff:61ff:fe00:404",
+        "2001:67c:2ed8:6100::4",
+        "fd01:67c:2ed8:6100::4"
+      ],
+      "site_code": "ffda",
+      "hostname": "gw04.darmstadt.freifunk.net",
+      "firmware": {
+        "base": "Debian"
+      },
+      "autoupdater": {
+        "enabled": false
+      },
+      "nproc": 2,
+      "vpn": true
+    },
+    {
+      "firstseen": "2015-10-16T11:00:02+0000",
+      "lastseen": "2017-11-02T21:08:59+0100",
+      "is_online": true,
+      "is_gateway": false,
+      "clients": 5,
+      "clients_wifi24": 1,
+      "clients_wifi5": 3,
+      "clients_other": 1,
+      "rootfs_usage": 0.0904,
+      "loadavg": 0.45,
+      "memory_usage": 0.2151159077846606,
+      "uptime": "2017-11-01T19:07:38+0100",
+      "gateway_nexthop": "daff61000605",
+      "gateway": "daff61000605",
+      "node_id": "c04a00dd692a",
+      "mac": "c0:4a:00:dd:69:2a",
+      "addresses": [
+        "fd01:67c:2ed8:6100:c24a:ff:fedd:692a",
+        "2001:67c:2ed8:6100:c24a:ff:fedd:692a",
+        "fe80::c24a:ff:fedd:692a"
+      ],
+      "site_code": "ffda",
+      "hostname": "64367-blockheizkraftwerk",
+      "location": {
+        "longitude": 8.70046645,
+        "latitude": 49.83675075
+      },
+      "firmware": {
+        "base": "gluon-v2017.1.3",
+        "release": "1.0.3"
+      },
+      "autoupdater": {
+        "enabled": true,
+        "branch": "stable"
+      },
+      "nproc": 1,
+      "model": "TP-Link TL-WDR3600 v1",
+      "vpn": false
+    },
+    {
+      "firstseen": "2015-11-23T18:34:02+0000",
+      "lastseen": "2017-10-21T00:33:58+0200",
+      "is_online": true,
+      "is_gateway": false,
+      "clients": 13,
+      "clients_wifi24": 10,
+      "clients_wifi5": 3,
+      "clients_other": 0,
+      "rootfs_usage": 0.0461,
+      "loadavg": 0.16,
+      "memory_usage": 0.5067692700683313,
+      "uptime": "2017-11-02T18:53:21+0100",
+      "gateway_nexthop": "60e3273a200a",
+      "gateway": "daff61000505",
+      "node_id": "60e3272f92b2",
+      "mac": "60:e3:27:2f:92:b2",
+      "addresses": [
+        "fd01:67c:2ed8:6100:62e3:27ff:fe2f:92b2",
+        "fe80::62e3:27ff:fe2f:92b2",
+        "2001:67c:2ed8:6100:62e3:27ff:fe2f:92b2"
+      ],
+      "site_code": "ffda",
+      "hostname": "64367-tagungshotel02",
+      "firmware": {
+        "base": "gluon-v2017.1.3",
+        "release": "1.0.3"
+      },
+      "autoupdater": {
+        "enabled": true,
+        "branch": "stable"
+      },
+      "nproc": 1,
+      "model": "TP-Link Archer C7 v2",
+      "vpn": false
+    }
+  ],
+  "links": [
+  ]
+}

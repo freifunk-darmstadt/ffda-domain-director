@@ -16,6 +16,8 @@ geojson = "*"
 lxml = "*"
 pyyaml = "*"
 mozls = "*"
+peewee = "*"
+pymeshviewer = "*"
 
 
 [dev-packages]
