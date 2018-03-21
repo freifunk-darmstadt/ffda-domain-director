@@ -109,3 +109,9 @@ class TestDomainModule(unittest.TestCase):
                          int(DecisionCriteria.APPROX_LOCATION))
         self.assertEqual(Node.get(node_id="daff61000402").mesh_id.decision_criteria,
                          None)
+
+    def test_get_domain_treshold_distance(self):
+        with open("domains/sample_domains.geojson") as gj:
+            polygons = load_domain_polygons(gj.read())
+        self.assertEqual(get_domain(49.81112, 8.70434, polygons, 1.5), None)
+        self.assertEqual(get_domain(49.81112, 8.70434, polygons, 1.6), "domain3")

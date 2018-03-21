@@ -4,6 +4,7 @@ from enum import Enum
 from shapely.geometry import shape, Point
 
 from domain_director.db import Node, Mesh
+from domain_director.geo import get_point_polygon_distance
 
 
 class DecisionCriteria(Enum):
@@ -25,14 +26,25 @@ def load_domain_polygons(geojson_input):
     return polygons
 
 
-def get_domain(lat, lon, domain_polygons):
+def get_domain(lat, lon, domain_polygons, treshold_distance=0):
+    closest_domain = None
+    closest_domain_distance = None
     for domain_name, polygon in domain_polygons.items():
         if polygon.contains(Point(lon, lat)):
             return domain_name
+
+        distance = get_point_polygon_distance(Point((lon, lat)), polygon)
+        if closest_domain_distance is None or distance < closest_domain_distance:
+            closest_domain = domain_name
+            closest_domain_distance = distance
+
+    if closest_domain and closest_domain_distance <= treshold_distance:
+        return closest_domain
     return None
 
 
-def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, default_domain=None, max_accuracy=250):
+def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, default_domain=None, max_accuracy=250,
+                       treshold_distance=0):
     criteria = None
     mesh_id = Node.get_mesh_id(node_id)
     domain = Node.get_domain(node_id)
@@ -41,10 +53,10 @@ def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, def
         return domain
 
     if lat and lon and accuracy and accuracy < max_accuracy:
-        domain = get_domain(lat, lon, polygons)
+        domain = get_domain(lat, lon, polygons, treshold_distance)
         criteria = DecisionCriteria.APPROX_LOCATION
     elif location["latitude"] is not None and location["longitude"] is not None:
-        domain = get_domain(location["latitude"], location["longitude"], polygons)
+        domain = get_domain(location["latitude"], location["longitude"], polygons, treshold_distance)
         criteria = DecisionCriteria.USER_LOCATION
 
     if domain and criteria:
