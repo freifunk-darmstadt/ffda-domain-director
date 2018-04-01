@@ -47,6 +47,8 @@ def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, def
                        treshold_distance=0):
     criteria = None
     mesh_id = Node.get_mesh_id(node_id)
+    if mesh_id is None:
+        return default_domain
     domain = Node.get_domain(node_id)
     location = Node.get_location(node_id)
     if domain:
