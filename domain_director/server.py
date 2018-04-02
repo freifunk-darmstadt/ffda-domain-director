@@ -1,3 +1,7 @@
+import atexit
+
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
 from flask import Flask
 from peewee import SqliteDatabase
 
@@ -27,11 +31,24 @@ def create_app(config, testing=False):
     setup_database(app)
     register_blueprints(app)
 
+    def update_nodes():
+        distribute_nodes_remote_meshviewer(app.config["MESHVIEWER_JSON_URL"], False)
+
+    scheduler = BackgroundScheduler()
+    scheduler.start()
+    scheduler.add_job(
+        func=update_nodes,
+        trigger=IntervalTrigger(seconds=300),
+        id='update_meshviewer_job',
+        name='Update nodes from meshviewer instance',
+        replace_existing=True)
+    atexit.register(lambda: scheduler.shutdown())
+
     return app
 
 
 def setup_database(app):
-    db.initialize(SqliteDatabase(app.config["SQlITE_PATH"]))
+    db.initialize(SqliteDatabase(app.config["SQLITE_PATH"]))
     if not Node.table_exists() and not Mesh.table_exists():
         create_tables(db)
         if not app.testing:
