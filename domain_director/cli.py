@@ -28,6 +28,7 @@ def run(config):
         DOMAIN_SWITCH_TIME=app_config["domain_switch_time"],
         DEFAULT_DOMAIN=app_config["default_domain"],
         MESHVIEWER_JSON_URL=app_config["meshviewer_json_url"],
-        SQLITE_PATH=app_config["sqlite_path"]
+        SQLITE_PATH=app_config["sqlite_path"],
+        UPDATE_INTERVAL=app_config["update_interval"]
     ))
     app.run(host=app_config["host"], port=app_config["port"])

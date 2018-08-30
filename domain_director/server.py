@@ -21,6 +21,7 @@ def create_app(config, testing=False):
         DOMAIN_SWITCH_TIME=1600000000,
         DEFAULT_DOMAIN="default",
         SQlITE_PATH=":memory:",
+        UPDATE_INTERVAL=-1,
     ))
     app.config.update(config or {})
     app.config.from_envvar('DOMAIN_DIRECTOR_SETTINGS', silent=True)
@@ -34,15 +35,16 @@ def create_app(config, testing=False):
     def update_nodes():
         distribute_nodes_remote_meshviewer(app.config["MESHVIEWER_JSON_URL"], False)
 
-    scheduler = BackgroundScheduler()
-    scheduler.start()
-    scheduler.add_job(
-        func=update_nodes,
-        trigger=IntervalTrigger(seconds=300),
-        id='update_meshviewer_job',
-        name='Update nodes from meshviewer instance',
-        replace_existing=True)
-    atexit.register(lambda: scheduler.shutdown())
+    if app.config["UPDATE_INTERVAL"] > 0:
+        scheduler = BackgroundScheduler()
+        scheduler.start()
+        scheduler.add_job(
+            func=update_nodes,
+            trigger=IntervalTrigger(seconds=app.config["UPDATE_INTERVAL"]),
+            id='update_meshviewer_job',
+            name='Update nodes from meshviewer instance',
+            replace_existing=True)
+        atexit.register(lambda: scheduler.shutdown())
 
     return app
 
