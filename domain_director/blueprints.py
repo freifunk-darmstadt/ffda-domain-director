@@ -5,6 +5,7 @@ from flask import Blueprint, request, current_app, jsonify
 from mozls import WifiNetwork, query_mls, MLSException
 
 from domain_director import ipv6_to_mac
+from domain_director.db import Node, Mesh
 from domain_director.domain import decide_node_domain
 
 bp = Blueprint('domain_director', __name__)
@@ -14,6 +15,8 @@ bp = Blueprint('domain_director', __name__)
 def serve():
     revisit = False
     domain = None
+    is_vpn_only = False
+
     wifis = request.form["wifis"]
     try:
         mls_response = query_mls(
@@ -24,6 +27,7 @@ def serve():
         mls_response = None
     try:
         node_id = ipv6_to_mac(request.remote_addr).replace(':', '')
+        is_vpn_only = len(list(Mesh.select().where(id=Node().get_mesh_id(node_id)))) == 1
         domain = decide_node_domain(node_id=node_id,
                                     lat=mls_response.lat if mls_response else None,
                                     lon=mls_response.lon if mls_response else None,
@@ -41,6 +45,7 @@ def serve():
                          "accuracy": mls_response.accuracy, },
             "domain": {
                 "name": domain if domain else current_app.config["DEFAULT_DOMAIN"],
-                "switch_time": current_app.config["DOMAIN_SWITCH_TIME"],
+                "switch_time": -1 if current_app.config["ONLY_MIGRATE_VPN"] and is_vpn_only
+                else current_app.config["DOMAIN_SWITCH_TIME"],
                 "revisit": revisit, }
         }})

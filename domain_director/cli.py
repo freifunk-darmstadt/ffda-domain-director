@@ -29,6 +29,7 @@ def run(config):
         DEFAULT_DOMAIN=app_config["default_domain"],
         MESHVIEWER_JSON_URL=app_config["meshviewer_json_url"],
         SQLITE_PATH=app_config["sqlite_path"],
-        UPDATE_INTERVAL=app_config["update_interval"]
+        UPDATE_INTERVAL=app_config["update_interval"],
+        ONLY_MIGRATE_VPN=app_config["only_migrate_vpn"]
     ))
     app.run(host=app_config["host"], port=app_config["port"])

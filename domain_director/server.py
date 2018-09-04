@@ -22,6 +22,7 @@ def create_app(config, testing=False):
         DEFAULT_DOMAIN="default",
         SQlITE_PATH=":memory:",
         UPDATE_INTERVAL=-1,
+        ONLY_MIGRATE_VPN=False,
     ))
     app.config.update(config or {})
     app.config.from_envvar('DOMAIN_DIRECTOR_SETTINGS', silent=True)

@@ -7,3 +7,4 @@ default_domain: default
 meshviewer_json_url: "https://meshviewer.darmstadt.freifunk.net/data/meshviewer.json"
 sqlite_path: "director.db"
 update_interval: -1
+only_migrate_vpn: true
