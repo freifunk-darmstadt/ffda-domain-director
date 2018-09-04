@@ -20,7 +20,7 @@ def create_app(config, testing=False):
         MLS_API_KEY="test",
         DOMAIN_SWITCH_TIME=1600000000,
         DEFAULT_DOMAIN="default",
-        SQlITE_PATH=":memory:",
+        SQLITE_PATH=":memory:",
         UPDATE_INTERVAL=-1,
         ONLY_MIGRATE_VPN=False,
     ))

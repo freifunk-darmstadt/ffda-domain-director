@@ -13,7 +13,7 @@ class TestServerModule(unittest.TestCase):
         app = create_app(dict(
             GEOJSON_FILE=geojson_location,
             MLS_API_KEY="test",
-            SQlITE_PATH=":memory:",
+            SQLITE_PATH=":memory:",
         ), testing=True)
         cls.app = app.test_client()
 
