@@ -27,7 +27,7 @@ def serve():
         mls_response = None
     try:
         node_id = ipv6_to_mac(request.remote_addr).replace(':', '')
-        is_vpn_only = len(list(Mesh.select().where(id=Node().get_mesh_id(node_id)))) == 1
+        is_vpn_only = len(list(Mesh.select().where(Mesh.id == Node().get_mesh_id(node_id)))) == 1
         domain = decide_node_domain(node_id=node_id,
                                     lat=mls_response.lat if mls_response else None,
                                     lon=mls_response.lon if mls_response else None,
