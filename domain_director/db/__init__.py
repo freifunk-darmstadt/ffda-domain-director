@@ -8,6 +8,8 @@ from domain_director.db.model import Mesh, Node
 def distribute_nodes(nodes: list, bridge_meshes: bool):
     for node in nodes:
         mesh_ids = []
+        if not node["online"]:
+            continue
         for neighbour in node["neighbours"]:
             try:
                 mesh_id = Node.get(node_id=neighbour).mesh_id
@@ -42,6 +44,7 @@ def distribute_nodes(nodes: list, bridge_meshes: bool):
 def distribute_nodes_meshviewer_json(meshviewer_json: str, initial_update=False):
     collection = parse_meshviewer_json(meshviewer_json)
     distribute_nodes([{"node_id": node.nodeinfo.node_id,
+                       "online": node.online,
                        "location": {
                            "latitude": node.nodeinfo.location.latitude if node.nodeinfo.location is not None else None,
                            "longitude": node.nodeinfo.location.longitude if node.nodeinfo.location is not None else None},
