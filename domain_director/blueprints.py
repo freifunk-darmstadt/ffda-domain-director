@@ -45,7 +45,7 @@ def serve():
                          "accuracy": mls_response.accuracy, },
             "domain": {
                 "name": domain if domain else current_app.config["DEFAULT_DOMAIN"],
-                "switch_time": -1 if current_app.config["ONLY_MIGRATE_VPN"] and is_vpn_only
+                "switch_time": -1 if current_app.config["ONLY_MIGRATE_VPN"] and not is_vpn_only
                 else current_app.config["DOMAIN_SWITCH_TIME"],
                 "revisit": revisit, }
         }})
