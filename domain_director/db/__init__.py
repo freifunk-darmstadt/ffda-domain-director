@@ -48,7 +48,7 @@ def distribute_nodes_meshviewer_json(meshviewer_json: str, initial_update=False)
                        "location": {
                            "latitude": node.nodeinfo.location.latitude if node.nodeinfo.location is not None else None,
                            "longitude": node.nodeinfo.location.longitude if node.nodeinfo.location is not None else None},
-                       "neighbours": [neighbour.node_id for neighbour in node.neighbours]}
+                       "neighbours": [neighbour.node_id for neighbour in node.neighbours if not neighbour.vpn]}
                       for node in collection.nodes], initial_update)
 
 
