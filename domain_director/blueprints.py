@@ -1,11 +1,10 @@
 import json
-from ipaddress import AddressValueError
-
 from flask import Blueprint, request, current_app, jsonify
+from ipaddress import AddressValueError
 from mozls import WifiNetwork, query_mls, MLSException
 
 from domain_director import ipv6_to_mac
-from domain_director.db import Node, Mesh
+from domain_director.db import Node
 from domain_director.domain import decide_node_domain
 
 bp = Blueprint('domain_director', __name__)
@@ -26,7 +25,8 @@ def serve():
     except MLSException:
         mls_response = None
     try:
-        node_id = ipv6_to_mac(request.remote_addr).replace(':', '')
+        ip_address = request.headers.get("X-Real-IP", None) or request.remote_addr
+        node_id = ipv6_to_mac(ip_address).replace(':', '')
         is_vpn_only = len(list(Node.select().where(Node.mesh_id == Node.get_mesh_id(node_id)))) == 1
         domain = decide_node_domain(node_id=node_id,
                                     lat=mls_response.lat if mls_response else None,
