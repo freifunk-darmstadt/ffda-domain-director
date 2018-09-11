@@ -10,6 +10,15 @@ def distribute_nodes(nodes: list, bridge_meshes: bool):
         mesh_ids = []
         if not node["online"]:
             continue
+
+        if not bridge_meshes:
+            try:
+                mesh_id = Node.get(node_id=node["node_id"]).mesh_id
+                if mesh_id is not None:
+                    continue
+            except DoesNotExist:
+                pass
+
         for neighbour in node["neighbours"]:
             try:
                 mesh_id = Node.get(node_id=neighbour).mesh_id
