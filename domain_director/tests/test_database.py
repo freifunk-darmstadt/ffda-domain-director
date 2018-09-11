@@ -1,5 +1,4 @@
 import unittest
-
 from peewee import SqliteDatabase
 
 from domain_director.db import create_tables, distribute_nodes, distribute_nodes_remote_meshviewer
@@ -9,36 +8,36 @@ from domain_director.db.model import db as database
 
 class TestDatabaseModule(unittest.TestCase):
     nodes = [
-        {"node_id": "de:ad:be:ef:ba:ba", "neighbours": ["de:ad:be:ef:ba:bb", "de:ad:be:ef:ba:bc"], },
-        {"node_id": "de:ad:be:ef:ba:bb", "neighbours": ["de:ad:be:ef:ba:bc", "de:ad:be:ef:ba:ba"], },
+        {"node_id": "de:ad:be:ef:ba:ba", "neighbours": ["de:ad:be:ef:ba:bb", "de:ad:be:ef:ba:bc"], "online": True, },
+        {"node_id": "de:ad:be:ef:ba:bb", "neighbours": ["de:ad:be:ef:ba:bc", "de:ad:be:ef:ba:ba"], "online": True, },
         {"node_id": "de:ad:be:ef:ba:bc",
-         "neighbours": ["de:ad:be:ef:ba:bd", "de:ad:be:ef:ba:bb", "de:ad:be:ef:ba:ba"], },
-        {"node_id": "de:ad:be:ef:ba:bd", "neighbours": ["de:ad:be:ef:ba:be", "de:ad:be:ef:ba:bc"], },
-        {"node_id": "de:ad:be:ef:ba:be", "neighbours": ["de:ad:be:ef:ba:bd"], },
-        {"node_id": "de:ad:be:ef:ba:bf", "neighbours": []},
+         "neighbours": ["de:ad:be:ef:ba:bd", "de:ad:be:ef:ba:bb", "de:ad:be:ef:ba:ba"], "online": True, },
+        {"node_id": "de:ad:be:ef:ba:bd", "neighbours": ["de:ad:be:ef:ba:be", "de:ad:be:ef:ba:bc"], "online": True, },
+        {"node_id": "de:ad:be:ef:ba:be", "neighbours": ["de:ad:be:ef:ba:bd"], "online": True, },
+        {"node_id": "de:ad:be:ef:ba:bf", "neighbours": [], "online": True, },
     ]
 
     initial_nodes = [
-        {"node_id": "de:ad:be:ef:ba:ba", "neighbours": ["de:ad:be:ef:ba:bb"], },
-        {"node_id": "de:ad:be:ef:ba:bb", "neighbours": ["de:ad:be:ef:ba:ba"], },
-        {"node_id": "de:ad:be:ef:ba:bd", "neighbours": ["de:ad:be:ef:ba:be"], },
-        {"node_id": "de:ad:be:ef:ba:be", "neighbours": ["de:ad:be:ef:ba:bd"], },
+        {"node_id": "de:ad:be:ef:ba:ba", "neighbours": ["de:ad:be:ef:ba:bb"], "online": True, },
+        {"node_id": "de:ad:be:ef:ba:bb", "neighbours": ["de:ad:be:ef:ba:ba"], "online": True, },
+        {"node_id": "de:ad:be:ef:ba:bd", "neighbours": ["de:ad:be:ef:ba:be"], "online": True, },
+        {"node_id": "de:ad:be:ef:ba:be", "neighbours": ["de:ad:be:ef:ba:bd"], "online": True, },
     ]
 
     extra_nodes = [
         {"node_id": "de:ad:be:ef:ba:bc",
-         "neighbours": ["de:ad:be:ef:ba:bd", "de:ad:be:ef:ba:bb", "de:ad:be:ef:ba:ba"], },
-        {"node_id": "de:ad:be:ef:ba:bf", "neighbours": []},
+         "neighbours": ["de:ad:be:ef:ba:bd", "de:ad:be:ef:ba:bb", "de:ad:be:ef:ba:ba"], "online": True, },
+        {"node_id": "de:ad:be:ef:ba:bf", "neighbours": [], "online": True, },
     ]
 
     nodes_state_0 = [
-        {"node_id": "de:ad:be:ef:ba:ba", "neighbours": [], },
-        {"node_id": "de:ad:be:ef:ba:bb", "neighbours": [], }
+        {"node_id": "de:ad:be:ef:ba:ba", "neighbours": [], "online": True, },
+        {"node_id": "de:ad:be:ef:ba:bb", "neighbours": [], "online": True, }
     ]
 
     nodes_state_1 = [
-        {"node_id": "de:ad:be:ef:ba:ba", "neighbours": ["de:ad:be:ef:ba:bb"], },
-        {"node_id": "de:ad:be:ef:ba:bb", "neighbours": ["de:ad:be:ef:ba:ba"], }
+        {"node_id": "de:ad:be:ef:ba:ba", "neighbours": ["de:ad:be:ef:ba:bb"], "online": True, },
+        {"node_id": "de:ad:be:ef:ba:bb", "neighbours": ["de:ad:be:ef:ba:ba"], "online": True, }
     ]
 
     def setUp(self):
