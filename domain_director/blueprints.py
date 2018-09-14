@@ -1,5 +1,5 @@
 import json
-from flask import Blueprint, request, current_app, jsonify
+from flask import Blueprint, request, current_app, jsonify, render_template
 from ipaddress import AddressValueError
 from mozls import WifiNetwork, query_mls, MLSException
 
@@ -49,3 +49,13 @@ def serve():
                 else current_app.config["DOMAIN_SWITCH_TIME"],
                 "revisit": revisit, }
         }})
+
+
+@bp.route('/nodes', methods=['GET'])
+def list_nodes():
+    return render_template("nodes.html", meshes=Node.get_nodes_grouped())
+
+
+@bp.route('/nodes.json', methods=['GET'])
+def list_nodes_json():
+    return jsonify(Node.get_nodes_grouped())

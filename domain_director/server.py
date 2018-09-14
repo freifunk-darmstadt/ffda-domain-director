@@ -1,4 +1,5 @@
 import atexit
+import os
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
@@ -12,7 +13,8 @@ from domain_director.domain import load_domain_polygons
 
 
 def create_app(config, testing=False):
-    app = Flask('domain-director')
+    tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+    app = Flask('domain-director', template_folder=tmpl_dir)
     app.testing = testing
 
     app.config.update(dict(

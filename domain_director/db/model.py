@@ -1,4 +1,5 @@
-from peewee import Model, AutoField, CharField, Proxy, ForeignKeyField, DoesNotExist, IntegerField, FloatField
+from peewee import Model, AutoField, CharField, Proxy, ForeignKeyField, DoesNotExist, IntegerField, FloatField, \
+    DateTimeField
 
 db = Proxy()
 
@@ -27,6 +28,8 @@ class Node(BaseModel):
     mesh_id = ForeignKeyField(Mesh, backref='nodes')
     latitude = FloatField(null=True)
     longitude = FloatField(null=True)
+    query_time = DateTimeField(null=True)
+    response = CharField(null=True)
 
     @staticmethod
     def get_domain(node_id):
@@ -51,6 +54,17 @@ class Node(BaseModel):
         except DoesNotExist:
             return None
         return {"latitude": node_db_entry.latitude, "longitude": node_db_entry.longitude}
+
+    @staticmethod
+    def get_nodes_grouped():
+        output = {}
+        for node in Node.select():
+            if node.mesh_id.id not in output:
+                output[node.mesh_id.id] = {"domain": node.mesh_id.domain, "nodes": []}
+            output[node.mesh_id.id]["nodes"].append({"node_id": node.node_id,
+                                                     "domain": node.response,
+                                                     "query_time": node.query_time})
+        return output
 
     class Meta:
         table_name = 'mesh_members'

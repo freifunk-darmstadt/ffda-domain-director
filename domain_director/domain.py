@@ -1,6 +1,7 @@
+import datetime
 import json
 from enum import Enum
-
+from peewee import DoesNotExist
 from shapely.geometry import shape, Point
 
 from domain_director.db import Node, Mesh
@@ -63,5 +64,9 @@ def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, def
 
     if domain and criteria:
         Mesh.set_domain(mesh_id, domain, criteria)
+        try:
+            Node.update(response=domain, query_time=datetime.datetime.now()).where(Node.node_id == node_id).execute()
+        except DoesNotExist:
+            pass
 
     return domain or default_domain
