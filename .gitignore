@@ -3,5 +3,5 @@ build/
 dist/
 *.egg-info/
 *.pyc
-
+*.db
 config.yml
