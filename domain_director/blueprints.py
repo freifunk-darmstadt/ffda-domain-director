@@ -11,14 +11,19 @@ bp = Blueprint('domain_director', __name__)
 
 @bp.route('/', methods=['GET', 'POST'])
 def serve():
-    wifis = request.form["wifis"]
+    mls_response = None
+    wifis = request.form.get("wifis", [])
     try:
         mls_response = query_mls(
             wifi_networks=[WifiNetwork(mac_address=ap["bssid"], signalStrength=int(ap["signal"]))
                            for ap in json.loads(wifis)],
             apikey=current_app.config["MLS_API_KEY"])
     except MLSException:
-        mls_response = None
+        # handle MLS data as optional (it is anyway)
+        pass
+    except ValueError:
+        # handle MLS data as optional (it is anyway)
+        pass
     ip_address = request.headers.get("X-Real-IP", None) or request.remote_addr
     node_id = ipv6_to_mac(ip_address).replace(':', '')
     domain, switch_time = get_node_domain(node_id=node_id,
