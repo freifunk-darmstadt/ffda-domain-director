@@ -25,6 +25,8 @@ setup(
         "pyyaml",
         "requests",
         "shapely",
+        "pymeshviewer",
+        "apscheduler"
     ],
     packages=find_packages(),
     entry_points={
