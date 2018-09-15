@@ -2,6 +2,7 @@ import os
 
 import click as click
 import yaml
+from waitress import serve
 
 from domain_director.server import create_app
 
@@ -32,4 +33,4 @@ def run(config):
         UPDATE_INTERVAL=app_config["update_interval"],
         ONLY_MIGRATE_VPN=app_config["only_migrate_vpn"]
     ))
-    app.run(host=app_config["host"], port=app_config["port"])
+    serve(app, listen='{host}:{port}'.format(host=app_config["host"], port=app_config["port"]))

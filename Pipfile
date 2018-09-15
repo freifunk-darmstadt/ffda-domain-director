@@ -16,6 +16,7 @@ mozls = "*"
 peewee = "*"
 pymeshviewer = "*"
 apscheduler = "*"
+waitress = "*"
 
 [dev-packages]
 pipenv = "*"

@@ -26,7 +26,8 @@ setup(
         "requests",
         "shapely",
         "pymeshviewer",
-        "apscheduler"
+        "apscheduler",
+        "waitress"
     ],
     packages=find_packages(),
     entry_points={
