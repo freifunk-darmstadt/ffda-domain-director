@@ -44,29 +44,40 @@ def get_domain(lat, lon, domain_polygons, treshold_distance=0):
     return None
 
 
-def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, default_domain=None, max_accuracy=250,
+def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, max_accuracy=250,
                        treshold_distance=0):
+    domain = None
     criteria = None
-    mesh_id = Node.get_mesh_id(node_id)
-    if mesh_id is None:
-        return default_domain
-    domain = Node.get_domain(node_id)
-    location = Node.get_location(node_id)
-    if domain:
-        return domain
-
     if lat and lon and accuracy and accuracy < max_accuracy:
         domain = get_domain(lat, lon, polygons, treshold_distance)
         criteria = DecisionCriteria.APPROX_LOCATION
-    elif location["latitude"] is not None and location["longitude"] is not None:
-        domain = get_domain(location["latitude"], location["longitude"], polygons, treshold_distance)
-        criteria = DecisionCriteria.USER_LOCATION
+    else:
+        location = Node.get_location(node_id)
+        if location["latitude"] is not None and location["longitude"] is not None:
+            domain = get_domain(location["latitude"], location["longitude"], polygons, treshold_distance)
+            criteria = DecisionCriteria.USER_LOCATION
 
-    if domain and criteria:
-        Mesh.set_domain(mesh_id, domain, criteria)
-        try:
-            Node.update(response=domain, query_time=datetime.datetime.now()).where(Node.node_id == node_id).execute()
-        except DoesNotExist:
-            pass
+    return domain, criteria
 
-    return domain or default_domain
+
+def get_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, default_domain=None, max_accuracy=250,
+                    treshold_distance=0):
+    mesh_id = Node.get_mesh_id(node_id)
+    if mesh_id is None:
+        domain = default_domain
+    else:
+        domain = Node.get_domain(node_id)
+
+    if not domain:
+        domain, criteria = decide_node_domain(node_id, polygons, lat, lon, accuracy, max_accuracy, treshold_distance)
+        if domain and criteria:
+            Mesh.set_domain(mesh_id, domain, criteria)
+
+    domain = domain or default_domain
+
+    try:
+        Node.update(response=domain, query_time=datetime.datetime.now()).where(Node.node_id == node_id).execute()
+    except DoesNotExist:
+        pass
+
+    return domain
