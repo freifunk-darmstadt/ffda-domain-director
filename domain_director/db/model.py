@@ -64,6 +64,7 @@ class Node(BaseModel):
                 output[node.mesh_id.id] = {"domain": node.mesh_id.domain, "nodes": []}
             output[node.mesh_id.id]["nodes"].append({"node_id": node.node_id,
                                                      "domain": node.response,
+                                                     "switch_time": node.switch_time,
                                                      "query_time": node.query_time})
         return output
 

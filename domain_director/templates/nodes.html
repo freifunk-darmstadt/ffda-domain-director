@@ -8,9 +8,9 @@
     {% for mesh_id, mesh in meshes.items() %}
     <h2>{{ mesh_id }} - {{ mesh.domain }}</h2>
     <table>
-        <tr><th>Node-ID</th><th>Domain</th><th>Query time</th></tr>
+        <tr><th>Node-ID</th><th>Domain</th><th>Switch time</th><th>Query time</th></tr>
     {% for node in mesh.nodes %}
-        <tr><td>{{ node.node_id }}</td><td>{{ node.domain }}</td><td>{{ node.query_time }}</td></tr>
+        <tr><td>{{ node.node_id }}</td><td>{{ node.domain }}</td><td>{{ node.switch_time }}</td><td>{{ node.query_time }}</td></tr>
     {% endfor %}
     {% endfor %}
     </table>
