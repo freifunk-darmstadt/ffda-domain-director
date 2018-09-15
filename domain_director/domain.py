@@ -61,12 +61,14 @@ def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, max
 
 
 def get_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, default_domain=None, max_accuracy=250,
-                    treshold_distance=0):
+                    treshold_distance=0, switch_time=-1, migrate_only_vpn=False):
+    is_vpn_only = False
     mesh_id = Node.get_mesh_id(node_id)
     if mesh_id is None:
         domain = default_domain
     else:
         domain = Node.get_domain(node_id)
+        is_vpn_only = len(list(Node.select().where(Node.mesh_id == mesh_id))) == 1
 
     if not domain:
         domain, criteria = decide_node_domain(node_id, polygons, lat, lon, accuracy, max_accuracy, treshold_distance)
@@ -75,9 +77,14 @@ def get_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, defaul
 
     domain = domain or default_domain
 
+    if migrate_only_vpn is True and not is_vpn_only:
+        out_switch_time = -1
+    else:
+        out_switch_time = switch_time
+
     try:
-        Node.update(response=domain, query_time=datetime.datetime.now()).where(Node.node_id == node_id).execute()
+        Node.update(response=domain, query_time=datetime.datetime.now(), switch_time=out_switch_time).where(Node.node_id == node_id).execute()
     except DoesNotExist:
         pass
 
-    return domain
+    return domain, out_switch_time

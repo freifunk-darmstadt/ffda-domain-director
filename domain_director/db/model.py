@@ -30,6 +30,7 @@ class Node(BaseModel):
     longitude = FloatField(null=True)
     query_time = DateTimeField(null=True)
     response = CharField(null=True)
+    switch_time = IntegerField(null=True)
 
     @staticmethod
     def get_domain(node_id):
