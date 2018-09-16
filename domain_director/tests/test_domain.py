@@ -22,6 +22,15 @@ class TestDomainModule(unittest.TestCase):
         self.assertEqual(get_domain(49.797885, 8.754848, polygons), "domain3")
         self.assertEqual(get_domain(49.791845, 8.693972, polygons), None)
 
+    def test_domain_query_no_approx_location(self):
+        with open("domains/sample_domains.geojson") as gj:
+            polygons = load_domain_polygons(gj.read())
+        with open("topologies/topology_independent.json", "r") as idp:
+            distribute_nodes_meshviewer_json(idp.read(), True)
+            idp.close()
+        dom0, decision_criteria = get_node_domain("c04a00dd692a", polygons=polygons)
+        self.assertEqual(dom0, "ffda_64367")
+
     def test_topology_update_no_bridging(self):
         # Test correct handling of topology update when bridging is not active
         with open("domains/sample_domains.geojson") as gj:
