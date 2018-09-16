@@ -45,17 +45,23 @@ def get_domain(lat, lon, domain_polygons, treshold_distance=0):
 
 
 def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, max_accuracy=250,
-                       treshold_distance=0):
-    domain = None
-    criteria = None
+                       treshold_distance=0, default_domain=None):
     if lat and lon and accuracy and accuracy < max_accuracy:
         domain = get_domain(lat, lon, polygons, treshold_distance)
         criteria = DecisionCriteria.APPROX_LOCATION
     else:
+        criteria = DecisionCriteria.USER_LOCATION
         location = Node.get_location(node_id)
-        if location["latitude"] is not None and location["longitude"] is not None:
-            domain = get_domain(location["latitude"], location["longitude"], polygons, treshold_distance)
-            criteria = DecisionCriteria.USER_LOCATION
+        if location["latitude"] is None and location["longitude"] is None:
+            # No location supplied by user
+            # Can't decide domain
+            return None, DecisionCriteria.USER_LOCATION
+        domain = get_domain(location["latitude"], location["longitude"], polygons, treshold_distance)
+
+    # If we do not have decided on a domain yet, we know the nodes location, but it is not covered by a domain
+    # nor close enough to one domain. So we are assigning it to the default domain.
+    # If no default domain is set, we are returning None here.
+    domain = domain or default_domain
 
     return domain, criteria
 
@@ -71,7 +77,8 @@ def get_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, defaul
         is_vpn_only = len(list(Node.select().where(Node.mesh_id == mesh_id))) == 1
 
     if not domain:
-        domain, criteria = decide_node_domain(node_id, polygons, lat, lon, accuracy, max_accuracy, treshold_distance)
+        domain, criteria = decide_node_domain(node_id, polygons, lat, lon, accuracy, max_accuracy, treshold_distance,
+                                              default_domain)
         if domain and criteria:
             Mesh.set_domain(mesh_id, domain, criteria)
 
