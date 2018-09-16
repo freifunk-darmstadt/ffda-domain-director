@@ -1,5 +1,6 @@
 import json
 from flask import Blueprint, request, current_app, jsonify, render_template
+from ipaddress import AddressValueError
 
 from domain_director import ipv6_to_mac
 from domain_director.db import Node
@@ -17,7 +18,10 @@ def serve():
         # handle MLS data as optional (it is anyway)
         pass
     ip_address = request.headers.get("X-Real-IP", None) or request.remote_addr
-    node_id = ipv6_to_mac(ip_address).replace(':', '')
+    try:
+        node_id = ipv6_to_mac(ip_address).replace(':', '')
+    except AddressValueError:
+        return "", 400
     domain, switch_time = get_node_domain(node_id=node_id,
                                           wifis=wifis,
                                           api_key=current_app.config["MLS_API_KEY"],
