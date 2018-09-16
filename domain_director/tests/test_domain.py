@@ -29,7 +29,7 @@ class TestDomainModule(unittest.TestCase):
             distribute_nodes_meshviewer_json(idp.read(), True)
             idp.close()
         dom0, decision_criteria = get_node_domain("c04a00dd692a", polygons=polygons)
-        self.assertEqual(dom0, "ffda_64367")
+        self.assertEqual(dom0, "domain1")
 
     def test_topology_update_no_bridging(self):
         # Test correct handling of topology update when bridging is not active
