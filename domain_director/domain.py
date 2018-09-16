@@ -1,6 +1,7 @@
 import datetime
 import json
 from enum import Enum
+from mozls import MLSException, query_mls, WifiNetwork
 from peewee import DoesNotExist
 from shapely.geometry import shape, Point
 
@@ -52,7 +53,7 @@ def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, max
     else:
         criteria = DecisionCriteria.USER_LOCATION
         location = Node.get_location(node_id)
-        if location["latitude"] is None and location["longitude"] is None:
+        if location is None or (location["latitude"] is None and location["longitude"] is None):
             # No location supplied by user
             # Can't decide domain
             return None, DecisionCriteria.USER_LOCATION
@@ -66,8 +67,9 @@ def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, max
     return domain, criteria
 
 
-def get_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, default_domain=None, max_accuracy=250,
-                    treshold_distance=0, switch_time=-1, migrate_only_vpn=False):
+def get_node_domain(node_id, polygons, wifis=None, api_key="test", lat=None, lon=None, accuracy=None,
+                    default_domain=None,
+                    max_accuracy=250, treshold_distance=0, switch_time=-1, migrate_only_vpn=False):
     is_vpn_only = False
     mesh_id = Node.get_mesh_id(node_id)
     if mesh_id is None:
@@ -77,6 +79,18 @@ def get_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, defaul
         is_vpn_only = len(list(Node.select().where(Node.mesh_id == mesh_id))) == 1
 
     if not domain:
+        if wifis is not None and len(wifis) > 2:
+            try:
+                mls_response = query_mls(
+                    wifi_networks=[WifiNetwork(mac_address=ap["bssid"], signalStrength=int(ap["signal"]))
+                                   for ap in wifis],
+                    apikey=api_key)
+                lat = mls_response.lat
+                lon = mls_response.lon
+                accuracy = mls_response.accuracy
+            except MLSException:
+                # handle MLS data as optional (it is anyway)
+                pass
         domain, criteria = decide_node_domain(node_id, polygons, lat, lon, accuracy, max_accuracy, treshold_distance,
                                               default_domain)
         if domain and criteria:
