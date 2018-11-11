@@ -17,6 +17,7 @@ peewee = "*"
 pymeshviewer = "*"
 apscheduler = "*"
 waitress = "*"
+"slpp-23" = "*"
 
 [dev-packages]
 pipenv = "*"
