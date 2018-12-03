@@ -5,3 +5,6 @@ dist/
 *.pyc
 *.db
 config.yml
+/domains.geojson
+/domains.json
+/domains.json
