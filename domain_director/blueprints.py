@@ -27,7 +27,7 @@ def serve():
                                           api_key=current_app.config["MLS_API_KEY"],
                                           polygons=current_app.domain_polygons,
                                           default_domain=current_app.config["DEFAULT_DOMAIN"],
-                                          switch_time=current_app.config["DOMAIN_SWITCH_TIME"],
+                                          default_switch_time=current_app.config["DOMAIN_SWITCH_TIME"],
                                           migrate_only_vpn=current_app.config["ONLY_MIGRATE_VPN"])
     return jsonify({
         "node_information": {
