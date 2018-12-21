@@ -51,9 +51,12 @@ def create_app(config, testing=False):
 
     return app
 
+def init_database(path):
+    db.initialize(SqliteDatabase(path))
 
 def setup_database(app):
-    db.initialize(SqliteDatabase(app.config["SQLITE_PATH"]))
+    init_database(app.config["SQLITE_PATH"])
+
     if not Node.table_exists() and not Mesh.table_exists():
         create_tables(db)
         if not app.testing:
