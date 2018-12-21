@@ -4,7 +4,7 @@ from ipaddress import AddressValueError
 
 from domain_director import ipv6_to_mac
 from domain_director.db import Node
-from domain_director.domain import get_node_domain
+from domain_director.domain import update_node_domain
 
 bp = Blueprint('domain_director', __name__)
 
@@ -22,7 +22,7 @@ def serve():
         node_id = ipv6_to_mac(ip_address).replace(':', '')
     except AddressValueError:
         return "", 400
-    domain, switch_time = get_node_domain(node_id=node_id,
+    domain, switch_time = update_node_domain(node_id=node_id,
                                           wifis=wifis,
                                           api_key=current_app.config["MLS_API_KEY"],
                                           polygons=current_app.domain_polygons,

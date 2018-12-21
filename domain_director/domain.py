@@ -65,8 +65,7 @@ def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, max
 
     return domain, criteria
 
-
-def get_node_domain(node_id, polygons, wifis=None, api_key="test", lat=None, lon=None, accuracy=None,
+def update_node_domain(node_id, polygons, wifis=None, api_key="test", lat=None, lon=None, accuracy=None,
                     default_domain=None,
                     max_accuracy=250, treshold_distance=0, default_switch_time=-1, migrate_only_vpn=False):
     is_vpn_only = False
