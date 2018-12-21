@@ -28,7 +28,7 @@ def load_domain_polygons(geojson_input):
     return polygons
 
 
-def get_domain(lat, lon, domain_polygons, treshold_distance=0):
+def get_domain_by_location(lat, lon, domain_polygons, treshold_distance=0):
     closest_domain = None
     closest_domain_distance = None
     for domain_name, polygon in domain_polygons.items():
@@ -44,11 +44,10 @@ def get_domain(lat, lon, domain_polygons, treshold_distance=0):
         return closest_domain
     return None
 
-
 def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, max_accuracy=250,
                        treshold_distance=0, default_domain=None):
     if lat and lon and accuracy and accuracy < max_accuracy:
-        domain = get_domain(lat, lon, polygons, treshold_distance)
+        domain = get_domain_by_location(lat, lon, polygons, treshold_distance)
         criteria = DecisionCriteria.APPROX_LOCATION
     else:
         criteria = DecisionCriteria.USER_LOCATION
@@ -57,7 +56,7 @@ def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, max
             # No location supplied by user
             # Can't decide domain
             return None, DecisionCriteria.USER_LOCATION
-        domain = get_domain(location["latitude"], location["longitude"], polygons, treshold_distance)
+        domain = get_domain_by_location(location["latitude"], location["longitude"], polygons, treshold_distance)
 
     # If we do not have decided on a domain yet, we know the nodes location, but it is not covered by a domain
     # nor close enough to one domain. So we are assigning it to the default domain.
