@@ -27,6 +27,7 @@ class Mesh(BaseModel):
     def set_domain(mesh_id, domain, decision_criteria):
         Mesh.update(domain=domain, decision_criteria=int(decision_criteria)).where(Mesh.id == mesh_id).execute()
 
+    @staticmethod
     def set_manual_switch_time(mesh_id, manual_switch_time):
         Mesh.update(manual_switch_time=manual_switch_time).where(Mesh.id == mesh_id).execute()
 
