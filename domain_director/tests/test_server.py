@@ -36,3 +36,7 @@ class TestServerModule(unittest.TestCase):
         rv = self.app.post('/', data={'wifis': json.dumps(post_data)},
                            environ_base={'REMOTE_ADDR': '2001:67c:2ed8:6100:fc64:3ff:fecd:45dd'})
         self.assertEqual(rv.status_code, 200)
+
+    def test_admin_mesh(self):
+        rv = self.app.patch('/admin/mesh/999999/', data={})
+        self.assertEqual(rv.status_code, 404)

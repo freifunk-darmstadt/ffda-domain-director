@@ -68,3 +68,4 @@ def setup_database(app):
 
 def register_blueprints(app):
     app.register_blueprint(domain_director.blueprints.bp)
+    app.register_blueprint(domain_director.blueprints.bp_admin, url_prefix='/admin')
