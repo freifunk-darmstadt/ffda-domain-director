@@ -2,6 +2,13 @@ from math import radians, sin, asin, sqrt, cos
 
 from shapely.geometry import Point, Polygon, LinearRing
 
+class Location:
+    def __init__(self, provider, lat, lon, accuracy=0):
+        self.provider = provider
+        self.lat = lat
+        self.lon = lon
+        self.accuracy = accuracy
+
 
 def haversine(lon1, lat1, lon2, lat2):
     # https://stackoverflow.com/questions/15736995/how-can-i-quickly-estimate-the-distance-between-two-latitude-longitude-points
