@@ -2,20 +2,20 @@ import json
 import os
 import unittest
 
+import yaml
+
 from domain_director.server import create_app
 
 
 class TestServerModule(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        geojson_location = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                        "domains/sample_domains.geojson")
-        app = create_app(dict(
-            GEOJSON_FILE=geojson_location,
-            MLS_API_KEY="test",
-            SQLITE_PATH=":memory:",
-        ), testing=True)
-        cls.app = app.test_client()
+        config_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                        "config/config0.yml")
+        with open(config_file, 'r') as c:
+            config = yaml.load(c.read())
+            app = create_app(dict(config), testing=True)
+            cls.app = app.test_client()
 
     def test_empty_get_request(self):
         rv = self.app.get('/')

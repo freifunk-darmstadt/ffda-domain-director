@@ -16,7 +16,7 @@ class MozillaProvider(GeoProvider):
                 wifi_networks=[WifiNetwork(mac_address=network["bssid"], signalStrength=int(network["signal"]))
                                for network in networks],
                 apikey=self.api_key)
-            return Location(self.provider, mls_response.lat, mls_response.lon, mls_response.accuracy)
+            return Location(mls_response.lat, mls_response.lon, accuracy=mls_response.accuracy, provider=self.provider)
         except MLSException:
             # handle MLS data as optional (it is anyway)
             return None

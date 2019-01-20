@@ -3,7 +3,7 @@ from math import radians, sin, asin, sqrt, cos
 from shapely.geometry import Point, Polygon, LinearRing
 
 class Location:
-    def __init__(self, provider, lat, lon, accuracy=0):
+    def __init__(self, lat, lon, accuracy=0, provider=None):
         self.provider = provider
         self.lat = lat
         self.lon = lon

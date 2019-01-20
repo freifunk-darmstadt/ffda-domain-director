@@ -20,17 +20,5 @@ def run(config):
     config_file_path = os.path.join(os.getcwd(), config) if config[0] != os.sep else config
     app_config = read_config_file(config_file_path)
 
-    geojson_file_path = os.path.join(os.getcwd(), app_config["geojson"]) if app_config["geojson"][0] != os.sep else \
-        app_config["geojson"]
-
-    app = create_app(dict(
-        GEOJSON_FILE=geojson_file_path,
-        MLS_API_KEY=app_config["mls_api_key"],
-        DOMAIN_SWITCH_TIME=app_config["domain_switch_time"],
-        DEFAULT_DOMAIN=app_config["default_domain"],
-        MESHVIEWER_JSON_URL=app_config["meshviewer_json_url"],
-        SQLITE_PATH=app_config["sqlite_path"],
-        UPDATE_INTERVAL=app_config["update_interval"],
-        ONLY_MIGRATE_VPN=app_config["only_migrate_vpn"]
-    ))
+    app = create_app(config=app_config)
     serve(app, listen='{host}:{port}'.format(host=app_config["host"], port=app_config["port"]))
