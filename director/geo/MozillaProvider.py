@@ -1,7 +1,7 @@
 from mozls import query_mls, WifiNetwork, MLSException
 
-from domain_director.geo import Location
-from domain_director.geo.Provider import GeoProvider
+from director.geo import Location
+from director.geo.Provider import GeoProvider
 
 
 class MozillaProvider(GeoProvider):

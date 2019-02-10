@@ -4,7 +4,7 @@ import click as click
 import yaml
 from waitress import serve
 
-from domain_director.server import create_app
+from director.server import create_app
 
 
 def read_config_file(path):

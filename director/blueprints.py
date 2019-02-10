@@ -2,10 +2,10 @@ import json
 from flask import Blueprint, request, current_app, jsonify, render_template
 from ipaddress import AddressValueError
 
-from domain_director import ipv6_to_mac
-from domain_director.db import Node
+from director import ipv6_to_mac
+from director.db import Node
 
-bp = Blueprint('domain_director', __name__)
+bp = Blueprint('director', __name__)
 
 
 @bp.route('/', methods=['GET', 'POST'])

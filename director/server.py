@@ -6,11 +6,11 @@ from apscheduler.triggers.interval import IntervalTrigger
 from flask import Flask
 from peewee import SqliteDatabase
 
-import domain_director.blueprints
-from domain_director.db import create_tables, distribute_nodes_remote_meshviewer
-from domain_director.db.model import db, Mesh, Node
-from domain_director.director import Director
-from domain_director.geo.MozillaProvider import MozillaProvider
+import director.blueprints
+from director.db import create_tables, distribute_nodes_remote_meshviewer
+from director.db.model import db, Mesh, Node
+from director.director import Director
+from director.geo.MozillaProvider import MozillaProvider
 
 
 def setup_geo_provider(config):
@@ -64,7 +64,7 @@ def create_app(config, testing=False):
     if app.config.get("director", None) is not None:
         app.director = setup_director(app.geo_provider, app.config["director"], app.testing)
 
-    app.register_blueprint(domain_director.blueprints.bp)
+    app.register_blueprint(director.blueprints.bp)
 
     return app
 

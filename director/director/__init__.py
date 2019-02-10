@@ -4,8 +4,8 @@ from enum import Enum
 from peewee import DoesNotExist
 from shapely.geometry import shape, Point
 
-from domain_director.db import Node, Mesh
-from domain_director.geo import get_point_polygon_distance, Location
+from director.db import Node, Mesh
+from director.geo import get_point_polygon_distance, Location
 
 
 class DecisionCriteria(Enum):

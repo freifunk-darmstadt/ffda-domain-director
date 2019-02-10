@@ -4,7 +4,7 @@ import unittest
 
 import yaml
 
-from domain_director.server import create_app
+from director.server import create_app
 
 
 class TestServerModule(unittest.TestCase):

@@ -1,6 +1,6 @@
 import unittest
 
-from domain_director import ipv6_to_mac
+from director import ipv6_to_mac
 
 
 class TestUtilModule(unittest.TestCase):

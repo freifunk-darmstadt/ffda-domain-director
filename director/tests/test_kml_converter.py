@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from domain_director.kml_converter import convert_kml_to_geojson
+from director.kml_converter import convert_kml_to_geojson
 
 
 class TestKMLConverterModule(unittest.TestCase):

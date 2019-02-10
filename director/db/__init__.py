@@ -2,7 +2,7 @@ import requests
 from peewee import DoesNotExist, IntegrityError, Database
 from pymeshviewer.parser import parse_meshviewer_json
 
-from domain_director.db.model import Mesh, Node
+from director.db.model import Mesh, Node
 
 
 def distribute_nodes(nodes: list, bridge_meshes: bool):

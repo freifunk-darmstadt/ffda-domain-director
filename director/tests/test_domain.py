@@ -3,11 +3,11 @@ import unittest
 import yaml
 from peewee import SqliteDatabase
 
-from domain_director.db import create_tables, distribute_nodes_meshviewer_json
-from domain_director.db.model import db, Node
+from director.db import create_tables, distribute_nodes_meshviewer_json
+from director.db.model import db, Node
 
-from domain_director.director import Director, DecisionCriteria
-from domain_director.geo import Location
+from director.director import Director, DecisionCriteria
+from director.geo import Location
 
 
 class TestDomainModule(unittest.TestCase):
