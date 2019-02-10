@@ -9,6 +9,7 @@ bp = Blueprint('director', __name__)
 
 
 @bp.route('/', methods=['GET', 'POST'])
+@bp.route('/get_domain', methods=['GET', 'POST'])
 def serve():
     wifis = []
     try:

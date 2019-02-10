@@ -20,9 +20,13 @@ class TestServerModule(unittest.TestCase):
     def test_empty_get_request(self):
         rv = self.app.get('/')
         self.assertEqual(rv.status_code, 400)
+        rv = self.app.get('/get_domain')
+        self.assertEqual(rv.status_code, 400)
 
     def test_empty_post_request(self):
         rv = self.app.post('/')
+        self.assertEqual(rv.status_code, 400)
+        rv = self.app.post('/get_domain')
         self.assertEqual(rv.status_code, 400)
 
     def test_correct_request(self):
@@ -34,5 +38,9 @@ class TestServerModule(unittest.TestCase):
                      {'signal': -74, 'bssid': '94:05:B6:5B:D9:E4'},
                      {'signal': -87, 'bssid': 'B4:30:52:38:C5:63'}]
         rv = self.app.post('/', data={'wifis': json.dumps(post_data)},
+                           environ_base={'REMOTE_ADDR': '2001:67c:2ed8:6100:fc64:3ff:fecd:45dd'})
+        self.assertEqual(rv.status_code, 200)
+
+        rv = self.app.post('/get_domain', data={'wifis': json.dumps(post_data)},
                            environ_base={'REMOTE_ADDR': '2001:67c:2ed8:6100:fc64:3ff:fecd:45dd'})
         self.assertEqual(rv.status_code, 200)
