@@ -5,7 +5,6 @@ from peewee import SqliteDatabase
 
 from director.db import create_tables, distribute_nodes_meshviewer_json
 from director.db.model import db, Node
-
 from director.director import Director, DecisionCriteria
 from director.geo import Location
 
@@ -124,3 +123,19 @@ class TestDomainModule(unittest.TestCase):
         self.assertEqual(self.director.get_domain(Location(49.81112, 8.70434)), None)
         self.director.config["tolerance_distance"] = 1.6
         self.assertEqual(self.director.get_domain(Location(49.81112, 8.70434)), "domain3")
+
+    def test_migrate_only_vpn(self):
+        self.director.config["migrate_only_vpn"] = True
+        with open("topologies/topology_independent.json", "r") as idp:
+            distribute_nodes_meshviewer_json(idp.read(), True)
+            idp.close()
+        domain, switch_time = self.director.get_node_domain("c04a00dd692a",
+                                                            location=Location(49.803427592, 8.670616150, 10))
+        self.assertEqual(switch_time, 1600000000)
+
+        with open("topologies/topology_fullmesh.json", "r") as idp:
+            distribute_nodes_meshviewer_json(idp.read(), True)
+            idp.close()
+        domain, switch_time = self.director.get_node_domain("c04a00dd692a",
+                                                            location=Location(49.803427592, 8.670616150, 10))
+        self.assertEqual(switch_time, -1)
