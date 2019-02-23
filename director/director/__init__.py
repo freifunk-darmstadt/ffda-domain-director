@@ -37,6 +37,10 @@ class Director:
 
         return polygons
 
+    @staticmethod
+    def mesh_is_vpn_only(mesh_id):
+        return len(list(Node.select().where(Node.mesh_id == mesh_id))) == 1
+
     def get_domain(self, location):
         closest_domain = None
         closest_domain_distance = None
@@ -74,13 +78,11 @@ class Director:
         return domain, criteria
 
     def get_node_domain(self, node_id, wifis=None, location=None):
-        is_vpn_only = False
         mesh_id = Node.get_mesh_id(node_id)
         if mesh_id is None:
             domain = self.config["default_domain"]
         else:
             domain = Node.get_domain(node_id)
-            is_vpn_only = len(list(Node.select().where(Node.mesh_id == mesh_id))) == 1
 
         if not domain:
             if wifis is not None and len(wifis) > 2:
@@ -93,7 +95,7 @@ class Director:
 
         domain = domain or self.config["default_domain"]
 
-        if self.config["only_migrate_vpn"] is True and not is_vpn_only:
+        if self.config["only_migrate_vpn"] and not self.mesh_is_vpn_only(mesh_id):
             out_switch_time = -1
         else:
             out_switch_time = self.config["domain_switch_time"]
