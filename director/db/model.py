@@ -13,6 +13,7 @@ class Mesh(BaseModel):
     id = AutoField(unique=True, primary_key=True)
     domain = CharField(null=True)
     decision_criteria = IntegerField(null=True)
+    switch_time = IntegerField(column_name='switch_time', null=True)
 
     @staticmethod
     def set_domain(mesh_id, domain, decision_criteria):
