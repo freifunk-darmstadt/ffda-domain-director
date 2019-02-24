@@ -1,12 +1,10 @@
 from peewee import Model, AutoField, CharField, Proxy, ForeignKeyField, DoesNotExist, IntegerField, FloatField, \
     DateTimeField
 
-db = Proxy()
-
 
 class BaseModel(Model):
     class Meta:
-        database = db
+        database = Proxy()
 
 
 class Mesh(BaseModel):

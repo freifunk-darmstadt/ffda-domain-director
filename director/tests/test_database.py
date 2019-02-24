@@ -1,9 +1,11 @@
 import unittest
+
 from peewee import SqliteDatabase
 
 from director.db import create_tables, distribute_nodes, distribute_nodes_remote_meshviewer
-from director.db.model import Mesh, Node
-from director.db.model import db as database
+from director.db.model import Mesh, Node, BaseModel
+
+database = BaseModel._meta.database
 
 
 class TestDatabaseModule(unittest.TestCase):

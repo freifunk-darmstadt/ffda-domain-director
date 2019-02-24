@@ -1,6 +1,6 @@
 import atexit
-import os
 
+import os
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from flask import Flask
@@ -9,9 +9,11 @@ from playhouse.migrate import migrate, SqliteMigrator
 
 import director.blueprints
 from director.db import create_tables, distribute_nodes_remote_meshviewer
-from director.db.model import db, Mesh, Node
+from director.db.model import Mesh, Node, BaseModel
 from director.director import Director
 from director.geo.MozillaProvider import MozillaProvider
+
+db = BaseModel._meta.database
 
 
 def setup_geo_provider(config):
@@ -78,5 +80,3 @@ def create_app(config, testing=False):
     app.register_blueprint(director.blueprints.bp)
 
     return app
-
-

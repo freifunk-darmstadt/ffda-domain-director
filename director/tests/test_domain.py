@@ -4,9 +4,11 @@ import yaml
 from peewee import SqliteDatabase
 
 from director.db import create_tables, distribute_nodes_meshviewer_json
-from director.db.model import db, Node
+from director.db.model import Node, BaseModel
 from director.director import Director, DecisionCriteria
 from director.geo import Location
+
+db = BaseModel._meta.database
 
 
 class TestDomainModule(unittest.TestCase):
