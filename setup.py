@@ -13,8 +13,9 @@ setup(
     long_description=long_description,
     author='David Bauer',
     author_email='david@darmstadt.freifunk.net',
-    url='https://www.github.com/blocktrron/domain-director',
+    url='https://github.com/freifunk-darmstadt/ffda-domain-director',
     license='AGPLv3',
+    include_package_data=True,
     install_requires=[
         "click",
         "fastkml",
@@ -32,6 +33,10 @@ setup(
     ],
     packages=find_packages(),
     entry_points={
-        'console_scripts': ['domain-director=domain_director:cli.run']
+        'console_scripts': [
+            'domain-director=domain_director.cli:run',
+            'domain-director-converter=domain_director.kml_converter.cli:run',
+            'domain-director-validator=domain_director.validator.cli:run'
+        ]
     },
 )
