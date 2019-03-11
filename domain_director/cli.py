@@ -1,4 +1,5 @@
 import os
+import sys
 from datetime import datetime
 
 import click as click
@@ -51,23 +52,23 @@ def set_switch_time(ctx, force, **kwargs):
         mesh_db_entry = Mesh.select().where(Mesh.id == int(kwargs['meshid'])).get()
     except DoesNotExist:
         print('Mesh with ID {} not found.'.format(kwargs['meshid']))
-        return
+        sys.exit(1)
     except ValueError:
         print('Invalid meshid specified')
-        return
+        sys.exit(1)
 
     try:
         switch_time = int(kwargs['switch_time'])
         switch_time_parsed = datetime.utcfromtimestamp(switch_time)
     except ValueError:
         print('Invalid switch time specified')
-        return
+        sys.exit(1)
 
     now = datetime.utcnow()
 
     if not force and (switch_time_parsed - now).total_seconds() < 0:
         print('Specified switch time lies in the past. Force to set value.')
-        return
+        sys.exit(1)
 
     Mesh.set_manual_switch_time(mesh_db_entry.id, switch_time)
 

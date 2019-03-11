@@ -3,7 +3,7 @@ from peewee import SqliteDatabase
 
 from domain_director.db import create_tables, distribute_nodes_meshviewer_json
 from domain_director.db.model import db, Node, Mesh
-from domain_director.domain import update_node_domain, load_domain_polygons, get_domain_by_location, DecisionCriteria
+from domain_director.domain import update_node_domain, load_domain_polygons, get_domain_from_location, DecisionCriteria
 
 class TestDomainModule(unittest.TestCase):
 
@@ -16,10 +16,10 @@ class TestDomainModule(unittest.TestCase):
         with open("domains/sample_domains.geojson", "r") as f:
             polygons = load_domain_polygons(f.read())
 
-        self.assertEqual(get_domain_by_location(49.843996, 8.700313, polygons), "domain1")
-        self.assertEqual(get_domain_by_location(49.859322, 8.754904, polygons), "domain2")
-        self.assertEqual(get_domain_by_location(49.797885, 8.754848, polygons), "domain3")
-        self.assertEqual(get_domain_by_location(49.791845, 8.693972, polygons), None)
+        self.assertEqual(get_domain_from_location(49.843996, 8.700313, polygons), "domain1")
+        self.assertEqual(get_domain_from_location(49.859322, 8.754904, polygons), "domain2")
+        self.assertEqual(get_domain_from_location(49.797885, 8.754848, polygons), "domain3")
+        self.assertEqual(get_domain_from_location(49.791845, 8.693972, polygons), None)
 
     def test_domain_query_no_approx_location(self):
         with open("domains/sample_domains.geojson") as gj:
@@ -120,8 +120,8 @@ class TestDomainModule(unittest.TestCase):
     def test_get_domain_treshold_distance(self):
         with open("domains/sample_domains.geojson") as gj:
             polygons = load_domain_polygons(gj.read())
-        self.assertEqual(get_domain_by_location(49.81112, 8.70434, polygons, 1.5), None)
-        self.assertEqual(get_domain_by_location(49.81112, 8.70434, polygons, 1.6), "domain3")
+        self.assertEqual(get_domain_from_location(49.81112, 8.70434, polygons, 1.5), None)
+        self.assertEqual(get_domain_from_location(49.81112, 8.70434, polygons, 1.6), "domain3")
 
     def test_manual_switch_time_independent(self):
         with open("domains/sample_domains.geojson") as gj:
