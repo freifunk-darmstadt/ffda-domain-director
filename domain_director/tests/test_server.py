@@ -1,9 +1,10 @@
 import json
 import os
 import unittest
+import time
 
 from domain_director.server import create_app
-
+from domain_director.db import distribute_nodes_meshviewer_json
 
 class TestServerModule(unittest.TestCase):
     @classmethod
@@ -40,3 +41,22 @@ class TestServerModule(unittest.TestCase):
     def test_admin_mesh(self):
         rv = self.app.patch('/admin/mesh/999999/', data={})
         self.assertEqual(rv.status_code, 404)
+
+        with open("topologies/topology_independent.json", "r") as idp:
+            distribute_nodes_meshviewer_json(idp.read(), True)
+            idp.close()
+
+        rv = self.app.patch('/admin/mesh/1/', data={})
+        self.assertEqual(rv.status_code, 400)
+
+        rv = self.app.patch('/admin/mesh/1/', data={"switch_time": 'xx3xx'})
+        self.assertEqual(rv.status_code, 400)
+
+        rv = self.app.patch('/admin/mesh/1/', data={"switch_time": int(time.time()) - 10})
+        self.assertEqual(rv.status_code, 400)
+
+        rv = self.app.patch('/admin/mesh/1/', data={"switch_time": int(time.time()) - 10, "force": True})
+        self.assertEqual(rv.status_code, 200)
+
+        rv = self.app.patch('/admin/mesh/1/', data={"switch_time": int(time.time()) + 10})
+        self.assertEqual(rv.status_code, 200)
