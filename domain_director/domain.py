@@ -28,7 +28,7 @@ def load_domain_polygons(geojson_input):
     return polygons
 
 
-def get_domain(lat, lon, domain_polygons, treshold_distance=0):
+def get_domain_from_location(lat, lon, domain_polygons, treshold_distance=0):
     closest_domain = None
     closest_domain_distance = None
     for domain_name, polygon in domain_polygons.items():
@@ -44,11 +44,10 @@ def get_domain(lat, lon, domain_polygons, treshold_distance=0):
         return closest_domain
     return None
 
-
 def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, max_accuracy=250,
                        treshold_distance=0, default_domain=None):
     if lat and lon and accuracy and accuracy < max_accuracy:
-        domain = get_domain(lat, lon, polygons, treshold_distance)
+        domain = get_domain_from_location(lat, lon, polygons, treshold_distance)
         criteria = DecisionCriteria.APPROX_LOCATION
     else:
         criteria = DecisionCriteria.USER_LOCATION
@@ -57,7 +56,7 @@ def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, max
             # No location supplied by user
             # Can't decide domain
             return None, DecisionCriteria.USER_LOCATION
-        domain = get_domain(location["latitude"], location["longitude"], polygons, treshold_distance)
+        domain = get_domain_from_location(location["latitude"], location["longitude"], polygons, treshold_distance)
 
     # If we do not have decided on a domain yet, we know the nodes location, but it is not covered by a domain
     # nor close enough to one domain. So we are assigning it to the default domain.
@@ -66,16 +65,17 @@ def decide_node_domain(node_id, polygons, lat=None, lon=None, accuracy=None, max
 
     return domain, criteria
 
-
-def get_node_domain(node_id, polygons, wifis=None, api_key="test", lat=None, lon=None, accuracy=None,
-                    default_domain=None,
-                    max_accuracy=250, treshold_distance=0, switch_time=-1, migrate_only_vpn=False):
+def update_node_domain(node_id, polygons, wifis=None, api_key="test", lat=None, lon=None, accuracy=None,
+                       default_domain=None,
+                       max_accuracy=250, treshold_distance=0, default_switch_time=-1, migrate_only_vpn=False):
     is_vpn_only = False
     mesh_id = Node.get_mesh_id(node_id)
     if mesh_id is None:
         domain = default_domain
+        switch_time = default_switch_time
     else:
         domain = Node.get_domain(node_id)
+        switch_time = Mesh.get_manual_switch_time(mesh_id) or default_switch_time
         is_vpn_only = len(list(Node.select().where(Node.mesh_id == mesh_id))) == 1
 
     if not domain:
@@ -99,13 +99,11 @@ def get_node_domain(node_id, polygons, wifis=None, api_key="test", lat=None, lon
     domain = domain or default_domain
 
     if migrate_only_vpn is True and not is_vpn_only:
-        out_switch_time = -1
-    else:
-        out_switch_time = switch_time
+        switch_time = -1
 
     try:
-        Node.update(response=domain, query_time=datetime.datetime.now(), switch_time=out_switch_time).where(Node.node_id == node_id).execute()
+        Node.update(response=domain, query_time=datetime.datetime.now(), switch_time=switch_time).where(Node.node_id == node_id).execute()
     except DoesNotExist:
         pass
 
-    return domain, out_switch_time
+    return domain, switch_time

@@ -13,10 +13,23 @@ class Mesh(BaseModel):
     id = AutoField(unique=True, primary_key=True)
     domain = CharField(null=True)
     decision_criteria = IntegerField(null=True)
+    manual_switch_time = IntegerField(null=True)
+
+    @staticmethod
+    def get_manual_switch_time(mesh_id):
+        try:
+            mesh_db_entry = Mesh.select().where(Mesh.id == mesh_id).get()
+        except DoesNotExist:
+            return None
+        return mesh_db_entry.manual_switch_time
 
     @staticmethod
     def set_domain(mesh_id, domain, decision_criteria):
         Mesh.update(domain=domain, decision_criteria=int(decision_criteria)).where(Mesh.id == mesh_id).execute()
+
+    @staticmethod
+    def set_manual_switch_time(mesh_id, manual_switch_time):
+        Mesh.update(manual_switch_time=manual_switch_time).where(Mesh.id == mesh_id).execute()
 
     class Meta:
         table_name = 'meshes'
