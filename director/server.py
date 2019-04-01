@@ -78,5 +78,6 @@ def create_app(config, testing=False):
         app.director = setup_director(app.geo_provider, app.config["director"], app.testing)
 
     app.register_blueprint(director.blueprints.bp)
+    app.register_blueprint(director.blueprints.bp_admin)
 
     return app

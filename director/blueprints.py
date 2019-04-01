@@ -1,11 +1,14 @@
 import json
-from flask import Blueprint, request, current_app, jsonify, render_template
+from datetime import datetime
+from flask import Blueprint, request, current_app, jsonify, render_template, abort
 from ipaddress import AddressValueError
+from peewee import DoesNotExist
 
 from director import ipv6_to_mac
-from director.db import Node
+from director.db import Node, Mesh
 
 bp = Blueprint('director', __name__)
+bp_admin = Blueprint('domain_director_admin', __name__)
 
 
 @bp.route('/', methods=['GET', 'POST'])
@@ -40,3 +43,35 @@ def list_nodes():
 @bp.route('/nodes.json', methods=['GET'])
 def list_nodes_json():
     return jsonify(Node.get_nodes_grouped())
+
+
+@bp_admin.route('/mesh/<int:mesh_id>/', methods=['PATCH'])
+def update_mesh(mesh_id):
+    if not request.is_json:
+        abort(400)
+
+    values = request.get_json()
+    try:
+        mesh_db_entry = Mesh.select().where(Mesh.id == int(mesh_id)).get()
+    except DoesNotExist:
+        abort(404)
+
+    if not 'switch_time' in values:
+        abort(400)
+
+    try:
+        switch_time = int(values['switch_time'])
+        switch_time_parsed = datetime.utcfromtimestamp(switch_time)
+    except ValueError:
+        return 'invalid switch time specified', 400
+
+    now = datetime.utcnow()
+
+    force = 'force' in request.values and values['force'].lower() in ['true', 'yes', '1']
+
+    if not force and (switch_time_parsed - now).total_seconds() < 0:
+        return 'Specified switch time lies in the past. Force to set value.', 400
+
+    Mesh.set_switch_time(mesh_db_entry.id, switch_time)
+
+    return "", 200
