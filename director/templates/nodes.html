@@ -6,7 +6,7 @@
 </head>
 <body>
     {% for mesh_id, mesh in meshes.items() %}
-    <h2>{{ mesh_id }} - {{ mesh.domain }}</h2>
+    <h2>{{ mesh_id }} - {{ mesh.domain }} - {{ mesh.switch_time }}</h2>
     <table>
         <tr><th>Node-ID</th><th>Domain</th><th>Switch time</th><th>Query time</th></tr>
     {% for node in mesh.nodes %}
