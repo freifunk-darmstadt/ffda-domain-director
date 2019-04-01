@@ -38,10 +38,9 @@ def setup_database(config, testing):
         if not testing:
             distribute_nodes_remote_meshviewer(config["meshviewer_json_url"], True)
     else:
+        migrate_database()
         if not testing:
             distribute_nodes_remote_meshviewer(config["meshviewer_json_url"], False)
-
-        migrate_database()
 
 
 def setup_director(geo_provider, config, testing):
