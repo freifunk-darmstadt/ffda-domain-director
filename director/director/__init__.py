@@ -95,13 +95,13 @@ class Director:
 
         domain = domain or self.config["default_domain"]
 
-        if self.config["only_migrate_vpn"] and not self.mesh_is_vpn_only(mesh_id):
-            switch_time = -1
-        elif not Mesh.get_switch_time(mesh_id):
-            switch_time = self.config["domain_switch_time"]
-            Mesh.set_switch_time(mesh_id, self.config["domain_switch_time"])
-        else:
-            switch_time = Mesh.get_switch_time(mesh_id)
+        switch_time = Mesh.get_switch_time(mesh_id)
+        if not Mesh.get_switch_time(mesh_id):
+            if self.config["only_migrate_vpn"] and not self.mesh_is_vpn_only(mesh_id):
+                switch_time = -1
+            else:
+                switch_time = self.config["domain_switch_time"]
+                Mesh.set_switch_time(mesh_id, self.config["domain_switch_time"])
 
         try:
             Node.update(response=domain, query_time=datetime.datetime.now(), switch_time=switch_time).where(
