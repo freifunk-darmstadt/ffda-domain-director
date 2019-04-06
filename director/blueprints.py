@@ -67,7 +67,7 @@ def update_mesh(mesh_id):
 
     now = datetime.utcnow()
 
-    force = 'force' in request.values and values['force'].lower() in ['true', 'yes', '1']
+    force = 'force' in values and values['force'].lower() in ['true', 'yes', '1']
 
     if not force and (switch_time_parsed - now).total_seconds() < 0:
         return 'Specified switch time lies in the past. Force to set value.', 400
