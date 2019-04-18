@@ -8,12 +8,12 @@ from director import ipv6_to_mac
 from director.db import Node, Mesh
 from director.director import DecisionCriteria
 
-bp = Blueprint('director', __name__)
-bp_admin = Blueprint('domain_director_admin', __name__)
+bp_director = Blueprint('director', __name__)
+bp_director_admin = Blueprint('domain_director_admin', __name__)
 
 
-@bp.route('/', methods=['GET', 'POST'])
-@bp.route('/get_domain', methods=['GET', 'POST'])
+@bp_director.route('/', methods=['GET', 'POST'])
+@bp_director.route('/get_domain', methods=['GET', 'POST'])
 def serve():
     wifis = []
     try:
@@ -36,17 +36,17 @@ def serve():
         }})
 
 
-@bp.route('/nodes', methods=['GET'])
+@bp_director.route('/nodes', methods=['GET'])
 def list_nodes():
     return render_template("nodes.html", meshes=Node.get_nodes_grouped())
 
 
-@bp.route('/nodes.json', methods=['GET'])
+@bp_director.route('/nodes.json', methods=['GET'])
 def list_nodes_json():
     return jsonify(Node.get_nodes_grouped())
 
 
-@bp_admin.route('/mesh/<int:mesh_id>/', methods=['PATCH'])
+@bp_director_admin.route('/mesh/<int:mesh_id>/', methods=['PATCH'])
 def update_mesh(mesh_id):
     if not request.is_json:
         abort(400)

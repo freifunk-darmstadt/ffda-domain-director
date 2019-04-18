@@ -75,8 +75,8 @@ def create_app(config, testing=False):
 
     if app.config.get("director", None) is not None:
         app.director = setup_director(app.geo_provider, app.config["director"], app.testing)
-
-    app.register_blueprint(director.blueprints.bp)
-    app.register_blueprint(director.blueprints.bp_admin)
+        app.register_blueprint(director.blueprints.bp_director)
+        if app.config["director"].get("enabled", False):
+            app.register_blueprint(director.blueprints.bp_director_admin)
 
     return app

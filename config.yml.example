@@ -9,6 +9,9 @@ geo:
 director:
     sqlite_path: "director.db"
 
+    admin:
+        enabled: true
+
     geojson: "domains.geojson"
     meshviewer_json_url: "https://meshviewer.darmstadt.freifunk.net/data/meshviewer.json"
     update_interval: -1
