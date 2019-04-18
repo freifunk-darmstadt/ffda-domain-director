@@ -79,4 +79,7 @@ def create_app(config, testing=False):
         if app.config["director"].get("enabled", False):
             app.register_blueprint(director.blueprints.bp_director_admin)
 
+    if app.config.get("locator", {}).get("enabled", False):
+        app.register_blueprint(director.blueprints.bp_locator)
+
     return app

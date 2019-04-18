@@ -21,3 +21,6 @@ director:
     only_migrate_vpn: true
     tolerance_distance: 200
     max_accuracy: 100
+
+locator:
+    enabled: true

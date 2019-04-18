@@ -10,6 +10,7 @@ from director.director import DecisionCriteria
 
 bp_director = Blueprint('director', __name__)
 bp_director_admin = Blueprint('domain_director_admin', __name__)
+bp_locator = Blueprint('locator', __name__)
 
 
 @bp_director.route('/', methods=['GET', 'POST'])
@@ -77,3 +78,20 @@ def update_mesh(mesh_id):
         Mesh.set_domain(mesh_db_entry.id, values['domain'], DecisionCriteria.MANUAL)
 
     return "", 200
+
+
+@bp_locator.route('/get_location', methods=['GET', 'POST'])
+def get_location():
+    try:
+        wifis = json.loads(request.form.get("wifis", "[]"))
+    except ValueError:
+        return "", 400
+    location = current_app.geo_provider.get_location(wifis)
+
+    return jsonify({
+        "location": {
+            "lat": location.lat,
+            "lon": location.lon,
+            "accuracy": location.accuracy
+        }})
+
