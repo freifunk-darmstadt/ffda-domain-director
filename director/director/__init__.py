@@ -12,6 +12,7 @@ class DecisionCriteria(Enum):
     APPROX_LOCATION = 1
     USER_LOCATION = 2
     DEFAULT_DOMAIN = 3
+    MANUAL = 4
 
     def __int__(self):
         return self.value

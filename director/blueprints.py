@@ -6,6 +6,7 @@ from peewee import DoesNotExist
 
 from director import ipv6_to_mac
 from director.db import Node, Mesh
+from director.director import DecisionCriteria
 
 bp = Blueprint('director', __name__)
 bp_admin = Blueprint('domain_director_admin', __name__)
@@ -56,22 +57,23 @@ def update_mesh(mesh_id):
     except DoesNotExist:
         abort(404)
 
-    if not 'switch_time' in values:
-        abort(400)
+    if 'switch_time' in values:
+        try:
+            switch_time = int(values['switch_time'])
+            switch_time_parsed = datetime.utcfromtimestamp(switch_time)
+        except ValueError:
+            return 'invalid switch time specified', 400
 
-    try:
-        switch_time = int(values['switch_time'])
-        switch_time_parsed = datetime.utcfromtimestamp(switch_time)
-    except ValueError:
-        return 'invalid switch time specified', 400
+        now = datetime.utcnow()
 
-    now = datetime.utcnow()
+        force = 'force' in values and values['force'].lower() in ['true', 'yes', '1']
 
-    force = 'force' in values and values['force'].lower() in ['true', 'yes', '1']
+        if not force and (switch_time_parsed - now).total_seconds() < 0:
+            return 'Specified switch time lies in the past. Force to set value.', 400
 
-    if not force and (switch_time_parsed - now).total_seconds() < 0:
-        return 'Specified switch time lies in the past. Force to set value.', 400
+        Mesh.set_switch_time(mesh_db_entry.id, switch_time)
 
-    Mesh.set_switch_time(mesh_db_entry.id, switch_time)
+    if 'domain' in values:
+        Mesh.set_domain(mesh_db_entry.id, values['domain'], DecisionCriteria.MANUAL)
 
     return "", 200
