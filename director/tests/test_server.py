@@ -44,3 +44,10 @@ class TestServerModule(unittest.TestCase):
         rv = self.app.post('/get_domain', data={'wifis': json.dumps(post_data)},
                            environ_base={'REMOTE_ADDR': '2001:67c:2ed8:6100:fc64:3ff:fecd:45dd'})
         self.assertEqual(rv.status_code, 200)
+
+    def test_admin_token(self):
+        rv = self.app.patch('/mesh/1/?token=ujVw0wU0kHms8TRXO4Ji9H0nF4ZVYVWUIz41AdfBYKtFSI16SEWFroWQa0OlbD3n')
+        self.assertNotEqual(401, rv.status_code)
+
+        rv = self.app.patch('/mesh/1/?token=badbadbad')
+        self.assertEqual(401, rv.status_code)

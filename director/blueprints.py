@@ -1,5 +1,7 @@
 import json
 from datetime import datetime
+from functools import wraps
+
 from flask import Blueprint, request, current_app, jsonify, render_template, abort
 from ipaddress import AddressValueError
 from peewee import DoesNotExist
@@ -47,7 +49,18 @@ def list_nodes_json():
     return jsonify(Node.get_nodes_grouped())
 
 
+def admin_token(f):
+    @wraps(f)
+    def check_token(*args, **kwargs):
+        if request.args.get('token') and request.args.get('token') == current_app.config["director"]["admin"]["token"]:
+            return f(*args, **kwargs)
+        else:
+            abort(401)
+    return check_token
+
+
 @bp_director_admin.route('/mesh/<int:mesh_id>/', methods=['PATCH'])
+@admin_token
 def update_mesh(mesh_id):
     if not request.is_json:
         abort(400)

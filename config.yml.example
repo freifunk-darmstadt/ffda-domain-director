@@ -13,6 +13,7 @@ director:
 
     admin:
         enabled: true
+        token: ujVw0wU0kHms8TRXO4Ji9H0nF4ZVYVWUIz41AdfBYKtFSI16SEWFroWQa0OlbD3n
 
     geojson: "domains.geojson"
     meshviewer_json_url: "https://meshviewer.darmstadt.freifunk.net/data/meshviewer.json"

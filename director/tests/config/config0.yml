@@ -7,7 +7,13 @@ geo:
         api_key: "test"
 
 director:
+    enabled: true
+
     sqlite_path: ":memory:"
+
+    admin:
+        enabled: true
+        token: ujVw0wU0kHms8TRXO4Ji9H0nF4ZVYVWUIz41AdfBYKtFSI16SEWFroWQa0OlbD3n
 
     geojson: "domains/sample_domains.geojson"
     meshviewer_json_url: "https://meshviewer.darmstadt.freifunk.net/data/meshviewer.json"
