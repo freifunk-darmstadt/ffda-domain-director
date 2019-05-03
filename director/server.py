@@ -5,10 +5,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from flask import Flask
 from peewee import SqliteDatabase
-from playhouse.migrate import migrate, SqliteMigrator
 
 import director.blueprints
-from director.db import create_tables, distribute_nodes_remote_meshviewer
+from director.db import create_tables, distribute_nodes_remote_meshviewer, update_tables
 from director.db.model import Mesh, Node, BaseModel
 from director.director import Director
 from director.geo.MozillaProvider import MozillaProvider
@@ -23,14 +22,6 @@ def setup_geo_provider(config):
     raise NotImplementedError
 
 
-def migrate_database():
-    migrator = SqliteMigrator(db)
-    mesh_columns = [e.name for e in db.get_columns('meshes')]
-    if 'switch_time' not in mesh_columns:
-        migrate(
-            migrator.add_column('meshes', 'switch_time', Mesh.switch_time),
-        )
-
 def setup_database(config, testing):
     db.initialize(SqliteDatabase(config["sqlite_path"]))
     if not Node.table_exists() and not Mesh.table_exists():
@@ -38,7 +29,7 @@ def setup_database(config, testing):
         if not testing:
             distribute_nodes_remote_meshviewer(config["meshviewer_json_url"], True)
     else:
-        migrate_database()
+        update_tables()
         if not testing:
             distribute_nodes_remote_meshviewer(config["meshviewer_json_url"], False)
 

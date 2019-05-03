@@ -1,8 +1,9 @@
 import requests
 from peewee import DoesNotExist, IntegrityError, Database
+from playhouse.migrate import SqliteMigrator, migrate
 from pymeshviewer.parser import parse_meshviewer_json
 
-from director.db.model import Mesh, Node
+from director.db.model import Mesh, Node, BaseModel
 
 
 def distribute_nodes(nodes: list, bridge_meshes: bool):
@@ -67,3 +68,12 @@ def distribute_nodes_remote_meshviewer(meshviewer_url, initial_update=False):
 
 def create_tables(database: Database):
     database.create_tables([Mesh, Node])
+
+
+def update_tables():
+    migrator = SqliteMigrator(BaseModel._meta.database)
+    mesh_columns = [e.name for e in BaseModel._meta.database.get_columns('meshes')]
+    if 'switch_time' not in mesh_columns:
+        migrate(
+            migrator.add_column('meshes', 'switch_time', Mesh.switch_time),
+        )
