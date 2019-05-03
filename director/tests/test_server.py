@@ -51,3 +51,26 @@ class TestServerModule(unittest.TestCase):
 
         rv = self.app.patch('/mesh/1/?token=badbadbad')
         self.assertEqual(401, rv.status_code)
+
+    def test_locator_invalid_request(self):
+        rv = self.app.post('/get_location')
+        self.assertEqual(400, rv.status_code)
+
+        rv = self.app.post('/get_location', data="{")
+        self.assertEqual(400, rv.status_code)
+
+        rv = self.app.post('/get_location', data={"wifis": []})
+        self.assertEqual(400, rv.status_code)
+
+    def test_locator_valid_request(self):
+        post_data = [{'signal': -58, 'bssid': '82:2A:A8:C2:AD:03'},
+                     {'signal': -42, 'bssid': 'F2:9F:C2:F5:AE:2C'},
+                     {'signal': -47, 'bssid': 'F0:9F:C2:F4:AE:2C'},
+                     {'signal': -74, 'bssid': '80:2A:A8:C1:B3:FA'},
+                     {'signal': -47, 'bssid': '80:2A:A8:C1:AD:03'},
+                     {'signal': -74, 'bssid': '94:05:B6:5B:D9:E4'},
+                     {'signal': -87, 'bssid': 'B4:30:52:38:C5:63'}]
+
+        rv = self.app.post('/get_location',
+                           data={'wifis': json.dumps(post_data)})
+        self.assertEqual(200, rv.status_code)

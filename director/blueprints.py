@@ -97,9 +97,14 @@ def update_mesh(mesh_id):
 def get_location():
     try:
         wifis = json.loads(request.form.get("wifis", "[]"))
+        if len(wifis) == 0:
+            abort(400)
     except ValueError:
         return "", 400
     location = current_app.geo_provider.get_location(wifis)
+
+    if location is None:
+        abort(500)
 
     return jsonify({
         "location": {

@@ -25,3 +25,5 @@ director:
     tolerance_distance: 0
     max_accuracy: 100
 
+locator:
+    enabled: true
