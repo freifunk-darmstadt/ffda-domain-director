@@ -34,9 +34,9 @@ setup(
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'domain-director=domain_director.cli:run',
-            'domain-director-converter=domain_director.kml_converter.cli:run',
-            'domain-director-validator=domain_director.validator.cli:run'
+            'domain-director=director.cli:run',
+            'domain-director-converter=kml_converter.cli:run',
+            'domain-director-validator=validator.cli:run'
         ]
     },
 )
