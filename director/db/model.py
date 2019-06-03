@@ -68,9 +68,16 @@ class Node(BaseModel):
         return {"latitude": node_db_entry.latitude, "longitude": node_db_entry.longitude}
 
     @staticmethod
-    def get_nodes_grouped():
+    def get_nodes_grouped(mesh_id=None):
         output = {}
-        for node in Node.select():
+        nodes = None
+
+        if mesh_id is not None:
+            nodes = Node.select().where(Node.mesh_id == int(mesh_id))
+        else:
+            nodes = Node.select()
+
+        for node in nodes:
             if node.mesh_id.id not in output:
                 output[node.mesh_id.id] = {
                     "domain": node.mesh_id.domain,

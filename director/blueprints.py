@@ -45,6 +45,12 @@ def list_nodes():
                            url=current_app.config["director"]["meshviewer_url"])
 
 
+@bp_director.route('/nodes/<int:mesh_id>/', methods=['GET'])
+def list_nodes_by_mesh(mesh_id):
+    return render_template("nodes.html", meshes=Node.get_nodes_grouped(mesh_id),
+                           url=current_app.config["director"]["meshviewer_url"])
+
+
 @bp_director.route('/nodes.json', methods=['GET'])
 def list_nodes_json():
     return jsonify(Node.get_nodes_grouped())
@@ -113,4 +119,3 @@ def get_location():
             "lon": location.lon,
             "accuracy": location.accuracy
         }})
-
