@@ -41,7 +41,8 @@ def serve():
 
 @bp_director.route('/nodes', methods=['GET'])
 def list_nodes():
-    return render_template("nodes.html", meshes=Node.get_nodes_grouped())
+    return render_template("nodes.html", meshes=Node.get_nodes_grouped(),
+                           url=current_app.config["director"]["meshviewer_url"])
 
 
 @bp_director.route('/nodes.json', methods=['GET'])
