@@ -1,18 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Nodes</title>
+    <style>
+        body {
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        table {
+            border: 2px solid;
+            border-collapse: collapse;
+        }
+
+        table td,
+        table th {
+            border: 1px solid;
+            padding: 2px 4px;
+        }
+
+        table thead {
+            background: #cfcfcf;
+            border-bottom: 2px solid;
+        }
+
+        table thead th {
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
 </head>
+
 <body>
     {% for mesh_id, mesh in meshes.items() %}
     <h2>{{ mesh_id }} - {{ mesh.domain }} - {{ mesh.switch_time }}</h2>
     <table>
-        <tr><th>Node-ID</th><th>Domain</th><th>Switch time</th><th>Query time</th></tr>
-    {% for node in mesh.nodes %}
-        <tr><td>{{ node.node_id }}</td><td>{{ node.domain }}</td><td>{{ node.switch_time }}</td><td>{{ node.query_time }}</td></tr>
-    {% endfor %}
+        <thead>
+            <tr>
+                <th>Node-ID</th>
+                <th>Domain</th>
+                <th>Switch time</th>
+                <th>Query time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for node in mesh.nodes %}
+            <tr>
+                <td><a target="_blank" href="{{ url }}/#!/de/map/{{ node.node_id }}">{{ node.node_id }}</a></td>
+                <td>{{ node.domain }}</td>
+                <td>{{ node.switch_time }}</td>
+                <td>{{ node.query_time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
     {% endfor %}
 </body>
+
 </html>
