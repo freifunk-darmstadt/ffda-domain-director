@@ -1,1 +1,1 @@
-include domain_director/templates/*.html
+include director/templates/*.html
