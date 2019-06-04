@@ -34,6 +34,11 @@ Defines the path the SQLite database is stored at. Relative and absolute paths a
 ### geojson
 Defines the path to the GeoJSON containing the polygons of all the domains nodes should be directed to.
 
+### meshviewer_url
+*Optional*
+
+Defines an URL for the meshviewer. If set, a direct link from the `/nodes` endpoint to the defined meshviewer instance will be available.
+
 ### meshviewer_json_url
 Defines the URL the `meshviewer.json` file is served at. This is usually located at `https://<map-vhost>/data/meshviewer.json`.
 
