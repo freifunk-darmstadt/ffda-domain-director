@@ -16,7 +16,7 @@ director:
         token: ujVw0wU0kHms8TRXO4Ji9H0nF4ZVYVWUIz41AdfBYKtFSI16SEWFroWQa0OlbD3n
 
     geojson: "domains.geojson"
-    meshviewer_url: "https://meshviewer.darmstadt.freifunk.net/#/de/map/%s"
+    meshviewer_url: "https://meshviewer.darmstadt.freifunk.net/"
     meshviewer_json_url: "https://meshviewer.darmstadt.freifunk.net/data/meshviewer.json"
     update_interval: -1
 
