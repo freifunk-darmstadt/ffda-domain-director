@@ -42,13 +42,13 @@ def serve():
 @bp_director.route('/nodes', methods=['GET'])
 def list_nodes():
     return render_template("nodes.html", meshes=Node.get_nodes_grouped(),
-                           url=current_app.config["director"]["meshviewer_url"])
+                           url=current_app.config["director"].get("meshviewer_url", None))
 
 
 @bp_director.route('/nodes/<int:mesh_id>/', methods=['GET'])
 def list_nodes_by_mesh(mesh_id):
     return render_template("nodes.html", meshes=Node.get_nodes_grouped(mesh_id),
-                           url=current_app.config["director"]["meshviewer_url"])
+                           url=current_app.config["director"].get("meshviewer_url", None))
 
 
 @bp_director.route('/nodes.json', methods=['GET'])

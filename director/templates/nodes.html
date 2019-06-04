@@ -48,7 +48,11 @@
         <tbody>
             {% for node in mesh.nodes %}
             <tr>
+                {% if url is not none %}
                 <td><a target="_blank" href="{{ url }}/#!/de/map/{{ node.node_id }}">{{ node.node_id }}</a></td>
+                {% else %}
+                <td>{{ node.node_id }}</td>
+                {% endif %}
                 <td>{{ node.domain }}</td>
                 <td>{{ node.switch_time }}</td>
                 <td>{{ node.query_time }}</td>
