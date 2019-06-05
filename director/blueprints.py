@@ -79,18 +79,21 @@ def update_mesh(mesh_id):
         abort(404)
 
     if 'switch_time' in values:
-        try:
-            switch_time = int(values['switch_time'])
-            switch_time_parsed = datetime.utcfromtimestamp(switch_time)
-        except ValueError:
-            return 'invalid switch time specified', 400
+        if values['switch_time'] is None:
+            switch_time = None
+        else:
+            try:
+                switch_time = int(values['switch_time'])
+                switch_time_parsed = datetime.utcfromtimestamp(switch_time)
+            except ValueError:
+                return 'invalid switch time specified', 400
 
-        now = datetime.utcnow()
+            now = datetime.utcnow()
 
-        force = 'force' in values and values['force'].lower() in ['true', 'yes', '1']
+            force = 'force' in values and values['force'].lower() in ['true', 'yes', '1']
 
-        if not force and (switch_time_parsed - now).total_seconds() < 0:
-            return 'Specified switch time lies in the past. Force to set value.', 400
+            if not force and (switch_time_parsed - now).total_seconds() < 0:
+                return 'Specified switch time lies in the past. Force to set value.', 400
 
         Mesh.set_switch_time(mesh_db_entry.id, switch_time)
 
