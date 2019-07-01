@@ -9,7 +9,10 @@ database = BaseModel._meta.database
 
 
 class TestDatabaseModule(unittest.TestCase):
-    nodes = [
+    links_initial = [
+        {nodes: [""]}
+    ]
+    nodes_initial = [
         {"node_id": "de:ad:be:ef:ba:ba", "neighbours": ["de:ad:be:ef:ba:bb", "de:ad:be:ef:ba:bc"], "online": True, },
         {"node_id": "de:ad:be:ef:ba:bb", "neighbours": ["de:ad:be:ef:ba:bc", "de:ad:be:ef:ba:ba"], "online": True, },
         {"node_id": "de:ad:be:ef:ba:bc",

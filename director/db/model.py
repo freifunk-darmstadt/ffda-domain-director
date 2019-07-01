@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from peewee import Model, AutoField, CharField, Proxy, ForeignKeyField, DoesNotExist, IntegerField, FloatField, \
     DateTimeField
 
@@ -7,40 +9,29 @@ class BaseModel(Model):
         database = Proxy()
 
 
-class Mesh(BaseModel):
+class Link(BaseModel):
     id = AutoField(unique=True, primary_key=True)
-    domain = CharField(null=True)
-    decision_criteria = IntegerField(null=True)
-    switch_time = IntegerField(column_name='switch_time', null=True)
+    node_a = CharField(null=True)
+    node_b = CharField(null=True)
+    first_seen = DateTimeField(column_name='first_seen', null=True)
+    last_seen = DateTimeField(column_name='last_seen', null=True)
 
     @staticmethod
-    def set_domain(mesh_id, domain, decision_criteria):
-        Mesh.update(domain=domain, decision_criteria=int(decision_criteria)).where(Mesh.id == mesh_id).execute()
-
-    @staticmethod
-    def get_switch_time(mesh_id):
-        try:
-            mesh_db_entry = Mesh.select().where(Mesh.id == mesh_id).get()
-        except DoesNotExist:
-            return None
-        return mesh_db_entry.switch_time
-
-    @staticmethod
-    def set_switch_time(mesh_id, switch_time):
-        Mesh.update(switch_time=switch_time).where(Mesh.id == mesh_id).execute()
+    def get_links(node_id):
+        links = Link.select().where(Link.node_a == node_id or Link.node_b).get()
+        return links if len(links) > 0 else []
 
     class Meta:
-        table_name = 'meshes'
+        table_name = 'links'
 
 
 class Node(BaseModel):
-    id = AutoField()
-    node_id = CharField(unique=True)
-    mesh_id = ForeignKeyField(Mesh, backref='nodes')
+    node_id = CharField(primary_key=True)
     latitude = FloatField(null=True)
     longitude = FloatField(null=True)
+    last_seen = DateTimeField()
     query_time = DateTimeField(null=True)
-    response = CharField(null=True)
+    domain = CharField(null=True)
     switch_time = IntegerField(null=True)
 
     @staticmethod
@@ -68,27 +59,34 @@ class Node(BaseModel):
         return {"latitude": node_db_entry.latitude, "longitude": node_db_entry.longitude}
 
     @staticmethod
-    def get_nodes_grouped(mesh_id=None):
-        output = {}
-        nodes = None
+    def get_nodes_grouped():
+        all_nodes = list(Node.select())
+        nodes = list(all_nodes)
+        meshes = []
 
-        if mesh_id is not None:
-            nodes = Node.select().where(Node.mesh_id == int(mesh_id))
-        else:
-            nodes = Node.select()
+        def follow_path(path_node):
+            nodes.remove(path_node)
+            node_links = Link.get_links(path_node.id)
+            neighbour_nodes = []
+            for link in node_links:
+                neighbour_node_id = link.node_a if link.node_a != path_node.node_id else link.node_b
+                neighbour_node_list = list(filter(lambda n: n.id == neighbour_node_id, all_nodes))
 
-        for node in nodes:
-            if node.mesh_id.id not in output:
-                output[node.mesh_id.id] = {
-                    "domain": node.mesh_id.domain,
-                    "switch_time": node.mesh_id.switch_time,
-                    "nodes": []
-                }
-            output[node.mesh_id.id]["nodes"].append({"node_id": node.node_id,
-                                                     "domain": node.response,
-                                                     "switch_time": node.switch_time,
-                                                     "query_time": node.query_time})
-        return output
+                if len(neighbour_node_list) is 0:
+                    continue
+
+                neighbour_node = neighbour_node_list[0]
+                if neighbour_node in nodes:
+                    neighbour_nodes += follow_path(neighbour_node)
+
+            return neighbour_nodes
+
+        while len(nodes) > 0:
+            node = nodes[0]
+            mesh = follow_path(node)
+            meshes.append(mesh)
+
+        return meshes
 
     class Meta:
-        table_name = 'mesh_members'
+        table_name = 'nodes'
