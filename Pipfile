@@ -16,7 +16,7 @@ mozls = "*"
 peewee = "*"
 pymeshviewer = "*"
 apscheduler = "*"
-waitress = "*"
+waitress = ">=1.4.0"
 "slpp-23" = "*"
 
 [dev-packages]
