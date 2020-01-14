@@ -28,7 +28,7 @@ setup(
         "shapely",
         "pymeshviewer",
         "apscheduler",
-        "waitress>=1.4.0",
+        "waitress>=1.4.2",
         "slpp-23"
     ],
     packages=find_packages(),
