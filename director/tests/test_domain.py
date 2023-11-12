@@ -20,7 +20,7 @@ class TestDomainModule(unittest.TestCase):
         with open("domains/sample_domains.geojson", "r") as f:
             polygons = f.read()
         with open("config/config0.yml", "r") as f:
-            config = yaml.load(f.read())
+            config = yaml.safe_load(f.read())
         self.director = Director(config["director"], None, polygons)
 
     def test_domains(self):

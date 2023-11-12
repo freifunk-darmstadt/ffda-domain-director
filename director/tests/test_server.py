@@ -13,7 +13,7 @@ class TestServerModule(unittest.TestCase):
         config_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                         "config/config0.yml")
         with open(config_file, 'r') as c:
-            config = yaml.load(c.read())
+            config = yaml.safe_load(c.read())
             app = create_app(dict(config), testing=True)
             cls.app = app.test_client()
 
